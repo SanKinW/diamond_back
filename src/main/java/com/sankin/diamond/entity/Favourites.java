@@ -14,5 +14,6 @@ public class Favourites {
     private Integer id;
     private Integer collectorId;
     private Integer docId;
+    private String docTitle;
     private Timestamp collectTime;
 }

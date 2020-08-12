@@ -15,6 +15,7 @@ public class Comments {
     private String content;
     private Integer docId;
     private Integer commentator;
+    private String commentatorName;
     private Timestamp commentTime;
     private Integer likeCount;
 }

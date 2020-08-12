@@ -19,7 +19,7 @@ import java.util.UUID;
  * @since:2020.8.11
  */
 @RestController
-public class LogContorller {
+public class LogController {
     @Autowired
     private UsersService usersService;
 

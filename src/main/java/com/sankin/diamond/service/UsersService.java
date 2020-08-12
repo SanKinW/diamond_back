@@ -1,5 +1,6 @@
 package com.sankin.diamond.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sankin.diamond.DTO.LogDTO;
 import com.sankin.diamond.DTO.UserDTO;
 import com.sankin.diamond.entity.Users;
@@ -7,9 +8,7 @@ import com.sankin.diamond.mapper.UsersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class UsersService {
@@ -37,7 +36,41 @@ public class UsersService {
         return result;
     }
 
-    public void modifyInformation(Users users) {
-        usersMapper.updateById(users);
+    public int modifyInformation(Users users) {
+        int result = usersMapper.updateById(users);
+        return result;
+    }
+
+    public List<String> selectByIds(String[] members) {
+        List<Integer> ids = new ArrayList<>();
+        for (String member : members) {
+            Integer id = Integer.parseInt(member);
+            ids.add(id);
+        }
+        List<Users> users = usersMapper.selectBatchIds(ids);
+        List<String> userNames = new ArrayList<>();
+        for (Users user: users) {
+            userNames.add(user.getUserName());
+        }
+        return userNames;
+    }
+
+    public void dismiss(Integer id) {
+        QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
+        String teamIds = "" + id;
+        queryWrapper.like("team_ids",teamIds);
+        List<Users> users = usersMapper.selectList(queryWrapper);
+        for (Users user : users) {
+            String[] ids = user.getTeamIds().split(",");
+            String newIds = "";
+            for(int i = 0; i < ids.length; ++i) {
+                if (!ids[i].equals(teamIds)) {
+                    if (i == 0) newIds = newIds + ids[i];
+                    else newIds = newIds + "," + ids[i];
+                }
+            }
+            user.setTeamIds(newIds);
+            usersMapper.updateById(user);
+        }
     }
 }

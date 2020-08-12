@@ -1,8 +1,6 @@
 package com.sankin.diamond.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -14,5 +12,7 @@ public class Views {
     private Integer id;
     private Integer viewerId;
     private Integer docId;
+    private String docTitle;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Timestamp latestTime;
 }

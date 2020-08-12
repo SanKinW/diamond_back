@@ -6,7 +6,6 @@ import java.sql.Date;
 
 @Data
 public class InformationDTO {
-    private Integer id;
     private String userName;
     private String password;
     private String token;

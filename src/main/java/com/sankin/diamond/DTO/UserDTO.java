@@ -17,5 +17,5 @@ public class UserDTO {
     private Date birthday;
     private String telephone;
     private String email;
-    private List<Integer> teamIds = new ArrayList<>();
+    private List<Integer> teams;
 }
