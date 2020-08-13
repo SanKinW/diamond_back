@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -44,13 +45,17 @@ public class DocsController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/doc/{id}/{title}", method = RequestMethod.GET)
     public Object viewDoc(@PathVariable("id") Integer id,
                           @PathVariable("title")String title,
-                          HttpServletRequest request) {
+                          HttpServletRequest request,
+                          HttpServletResponse response) {
+        //response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
         UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        viewService.createOrUpdate(user.getId(),id, title);
+        if(user != null) viewService.createOrUpdate(user.getId(),id, title);
+        else viewService.createOrUpdate(0,id, title);
         Docs doc = docsService.selectOne(id);
         DocReturnDTO returnDTO = new DocReturnDTO();
         BeanUtils.copyProperties(doc, returnDTO);
@@ -71,6 +76,7 @@ public class DocsController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/doc", method = RequestMethod.POST)
     public Object createDoc(@RequestBody DocCreateDTO docCreateDTO, HttpServletRequest request) {
@@ -90,6 +96,7 @@ public class DocsController {
      * @param id
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/doc/{id}",method = RequestMethod.POST)
     public Object updateDoc(@RequestBody DocCreateDTO docCreateDTO,
@@ -110,6 +117,7 @@ public class DocsController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/collect/{id}/{title}",method = RequestMethod.GET)
     public Object collectDoc(@PathVariable("id") Integer id,
@@ -127,6 +135,7 @@ public class DocsController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/cancel/{id}",method = RequestMethod.GET)
     public Object cancelCollectDoc(@PathVariable("id") Integer id, HttpServletRequest request) {
@@ -140,6 +149,7 @@ public class DocsController {
      * @param id
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
     public Object deleteDoc(@PathVariable("id") Integer id) {
@@ -152,6 +162,7 @@ public class DocsController {
      * @param id
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/recovery/{id}",method = RequestMethod.PUT)
     public Object recoveryDoc(@PathVariable("id") Integer id) {

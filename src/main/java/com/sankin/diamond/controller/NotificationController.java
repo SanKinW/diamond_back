@@ -16,6 +16,7 @@ public class NotificationController {
      * @param userName
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/invite/{teamId}/{userName}", method = RequestMethod.GET)
     public Object inviteUser(@PathVariable("teamId") Integer teamId,
@@ -31,6 +32,7 @@ public class NotificationController {
      * @param userName
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/apply/{teamId}/{userName}", method = RequestMethod.GET)
     public Object joinTeamByOwn(@PathVariable("teamId") Integer teamId,

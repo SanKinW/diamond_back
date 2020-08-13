@@ -35,6 +35,7 @@ public class TeamController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/team", method = RequestMethod.POST)
     public Object createTeam(@RequestBody TeamCreateDTO teamCreateDTO, HttpServletRequest request) {
@@ -52,6 +53,7 @@ public class TeamController {
     /**
      * 解散团队
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/deleteTeam/{id}", method = RequestMethod.DELETE)
     public Object deletedTeam(@PathVariable("id") Integer id) {
@@ -67,6 +69,7 @@ public class TeamController {
      * @param id
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/team/{id}", method = RequestMethod.GET)
     public TeamReturnDTO teamInformation(@PathVariable("id")Integer id) {
@@ -87,6 +90,7 @@ public class TeamController {
      * @param userId
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/join/{teamId}/{userId}", method = RequestMethod.GET)
     public Object joinTeam(@PathVariable("teamId") Integer teamId,
@@ -105,6 +109,7 @@ public class TeamController {
      * @param userName
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/quit/{teamId}/{userName}", method = RequestMethod.GET)
     public Object quitTeam(@PathVariable("teamId") Integer teamId,

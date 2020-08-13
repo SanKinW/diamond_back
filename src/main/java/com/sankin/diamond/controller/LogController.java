@@ -29,6 +29,7 @@ public class LogController {
      * @param response
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public Object register(@RequestBody LogDTO logDTO, HttpServletResponse response) {
@@ -51,6 +52,7 @@ public class LogController {
      * @param response
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Object login(@RequestBody LogDTO logDTO, HttpServletResponse response){
@@ -72,6 +74,7 @@ public class LogController {
      * @param response
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request,

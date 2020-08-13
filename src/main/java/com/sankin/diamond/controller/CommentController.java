@@ -29,6 +29,7 @@ public class CommentController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
     public Object Comment(@RequestBody CommentDTO commentDTO, HttpServletRequest request) {

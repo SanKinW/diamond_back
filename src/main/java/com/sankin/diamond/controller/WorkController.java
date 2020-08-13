@@ -43,6 +43,7 @@ public class WorkController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/views", method = RequestMethod.GET)
     public List<Views> browsingRecord(HttpServletRequest request) {
@@ -57,6 +58,7 @@ public class WorkController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/collect/{page}", method = RequestMethod.GET)
     public Page<Favourites> favouriteRecord(@PathVariable("page") Integer page, HttpServletRequest request) {
@@ -71,6 +73,7 @@ public class WorkController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/mydoc/{page}", method = RequestMethod.GET)
     public Page<Docs> myDocRecord(@PathVariable("page")Integer page, HttpServletRequest request) {
@@ -84,6 +87,7 @@ public class WorkController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/myteam", method = RequestMethod.GET)
     public List<TeamCheckDTO> myTeamRecord(HttpServletRequest request) {
@@ -97,6 +101,7 @@ public class WorkController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/recycle", method = RequestMethod.GET)
     public List<DeleteDocDTO> recycle(HttpServletRequest request) {

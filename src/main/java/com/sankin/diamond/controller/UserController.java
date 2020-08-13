@@ -26,6 +26,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/information", method = RequestMethod.GET)
     public Object getInformation(HttpServletRequest request) {
@@ -39,6 +40,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/information", method = RequestMethod.POST)
     public Object changeInformation(@RequestBody InformationDTO informationDTO, HttpServletRequest request) {
