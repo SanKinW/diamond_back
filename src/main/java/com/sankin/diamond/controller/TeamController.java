@@ -5,6 +5,7 @@ import com.sankin.diamond.entity.Team;
 import com.sankin.diamond.exception.ErrorException;
 import com.sankin.diamond.exception.ErrorType;
 import com.sankin.diamond.service.DocsService;
+import com.sankin.diamond.service.NotificationService;
 import com.sankin.diamond.service.TeamService;
 import com.sankin.diamond.service.UsersService;
 import org.springframework.beans.BeanUtils;
@@ -24,6 +25,9 @@ public class TeamController {
 
     @Autowired
     private DocsService docsService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     /**
      * 创建团队
@@ -85,16 +89,32 @@ public class TeamController {
      */
     @ResponseBody
     @RequestMapping(value = "/join/{teamId}/{userId}", method = RequestMethod.GET)
-    public Object joinTeam(@PathVariable("teamId") Integer teamId, @PathVariable("userId") Integer userId) {
+    public Object joinTeam(@PathVariable("teamId") Integer teamId,
+                           @PathVariable("userId") Integer userId) {
         int result = teamService.updateMembers(teamId, userId);
         if (result > 0) {
-            /**
-             * 用户的团队列表中添加
-             */
+            usersService.updateTeams(userId, teamId);
             return ResultDTO.okOf();
         }
         else return ResultDTO.errorOf(new ErrorException(ErrorType.TEAM_JOIN_FAILED));
     }
 
-
+    /**
+     * 退出团队
+     * @param teamId
+     * @param userName
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/quit/{teamId}/{userName}", method = RequestMethod.GET)
+    public Object quitTeam(@PathVariable("teamId") Integer teamId,
+                           @PathVariable("userName") String userName,
+                           HttpServletRequest request) {
+        usersService.quitTeam(userName, teamId);
+        teamService.clearUser(userName, teamId);
+        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        if (user.getUserName().equals(userName)) notificationService.quit(teamId, userName, 3);
+        else notificationService.quit(teamId, userName, 4);
+        return ResultDTO.okOf();
+    }
 }

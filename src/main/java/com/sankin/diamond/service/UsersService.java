@@ -81,4 +81,33 @@ public class UsersService {
     public Users selectById(int i) {
         return usersMapper.selectById(i);
     }
+
+    public void updateTeams(Integer userId, Integer teamId) {
+        Users user = usersMapper.selectById(userId);
+        String teamIds = user.getTeamIds();
+        if (teamId == null || teamId.equals("")) {
+            teamIds = "" + teamId;
+        }
+        else {
+            teamIds = teamIds + "," + teamId;
+        }
+        user.setTeamIds(teamIds);
+        usersMapper.updateById(user);
+    }
+
+    public void quitTeam(String userName, Integer teamId) {
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("user_name", userName);
+        Users user = usersMapper.selectByMap(columnMap).get(0);
+        String[] teamIds = user.getTeamIds().split(",");
+        String newIds = "";
+        for(int i = 0; i < teamIds.length; ++i) {
+            if (!teamIds[i].equals(teamId)) {
+                if (i == 0) newIds = newIds + teamIds[i];
+                else newIds = newIds + "," + teamIds[i];
+            }
+        }
+        user.setTeamIds(newIds);
+        usersMapper.updateById(user);
+    }
 }

@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //@EnableWebMvc
 public class CorsConfig implements WebMvcConfigurer {
 
-
     public void addCorsMappings(CorsRegistry registry) {
         //设置允许跨域的路径
         registry.addMapping("/**")

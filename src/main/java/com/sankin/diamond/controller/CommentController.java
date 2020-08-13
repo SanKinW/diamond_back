@@ -5,6 +5,7 @@ import com.sankin.diamond.DTO.ResultDTO;
 import com.sankin.diamond.DTO.UserDTO;
 import com.sankin.diamond.service.CommentService;
 import com.sankin.diamond.service.DocsService;
+import com.sankin.diamond.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,9 @@ public class CommentController {
     @Autowired
     private DocsService docsService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     /**
      * 评论
      * @param commentDTO
@@ -31,6 +35,7 @@ public class CommentController {
         UserDTO user = (UserDTO) request.getSession().getAttribute("user");
         commentService.insertOne(commentDTO, user);
         docsService.incComment(commentDTO.getDocId());
+        notificationService.newComment(commentDTO, user);
         return ResultDTO.okOf();
     }
 
