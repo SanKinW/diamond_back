@@ -11,15 +11,12 @@ import com.sankin.diamond.entity.Docs;
 import com.sankin.diamond.entity.Users;
 import com.sankin.diamond.mapper.DocMapper;
 import com.sankin.diamond.mapper.UsersMapper;
-import org.apache.catalina.mbeans.UserMBean;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.util.*;
 
 
 @Service
@@ -33,11 +30,14 @@ public class DocsService {
 
 
     public int insertOne(Docs docs) {
+        docs.setCreateTime(new Timestamp(new Date().getTime()));
+        docs.setUpdateTime(new Timestamp(new Date().getTime()));
         int result =  docMapper.insert(docs);
         return result;
     }
 
     public int updateOne(Docs docs) {
+        docs.setUpdateTime(new Timestamp(new Date().getTime()));
         int result =  docMapper.updateById(docs);
         return result;
     }

@@ -29,6 +29,10 @@ public class UsersService {
     }
 
     public int insertOne(LogDTO logDTO) {
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("user_name", logDTO.getUserName());
+        List<Users> usersList = usersMapper.selectByMap(columnMap);
+        if (usersList.size() != 0) return 0;
         Users users = new Users();
         users.setUserName(logDTO.getUserName());
         users.setPassword(logDTO.getPassword());
@@ -72,5 +76,9 @@ public class UsersService {
             user.setTeamIds(newIds);
             usersMapper.updateById(user);
         }
+    }
+
+    public Users selectById(int i) {
+        return usersMapper.selectById(i);
     }
 }

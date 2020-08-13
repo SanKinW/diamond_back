@@ -57,9 +57,11 @@ public class DocsController {
         returnDTO.setCollected(favouriteService.findByOne(user, id));
         List<Comments> comments = commentService.selectByDocId(id);
         returnDTO.setComments(comments);
+
         /**
          * 增加一下权限
          */
+        System.out.println(doc.getTitle());
         return returnDTO;
     }
 

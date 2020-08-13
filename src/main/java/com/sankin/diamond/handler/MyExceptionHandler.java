@@ -6,7 +6,6 @@ import com.sankin.diamond.exception.ErrorException;
 import com.sankin.diamond.exception.ErrorType;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +15,9 @@ import java.io.PrintWriter;
 @ControllerAdvice
 public class MyExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
+    /*@ExceptionHandler(Exception.class)
     void handle(Throwable ex, HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("error test");
         String contentType = request.getContentType();
         ResultDTO resultDTO = null;
         if ("application/json".equals(contentType)) {
@@ -41,7 +41,7 @@ public class MyExceptionHandler {
             if (ex instanceof ErrorException) {
                 resultDTO = ResultDTO.errorOf((ErrorException) ex);
             } else {
-               resultDTO = ResultDTO.errorOf(ErrorType.SYSTEM_ERROR.getType(), ErrorType.SYSTEM_ERROR.getMessage());
+               resultDTO = ResultDTO.okOf();
             }
             try {
                 response.setStatus(resultDTO.getType());
@@ -53,5 +53,5 @@ public class MyExceptionHandler {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 }
