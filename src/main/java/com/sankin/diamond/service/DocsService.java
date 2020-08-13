@@ -54,12 +54,12 @@ public class DocsService {
         docMapper.updateById(doc);
     }
 
-    public IPage<Docs> selectByPage(UserDTO user, Integer page) {
+    public Page<Docs> selectByPage(UserDTO user, Integer page) {
         QueryWrapper<Docs> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("creator", user.getId()).select("id","title","collect_count","authority");
         Page<Docs> docs = new Page<>(page, 6);
-        IPage<Docs> docsIPage = docMapper.selectPage(docs, queryWrapper);
-        return docsIPage;
+        Page<Docs> docsPage = docMapper.selectPage(docs, queryWrapper);
+        return docsPage;
     }
 
 

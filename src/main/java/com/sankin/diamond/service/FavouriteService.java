@@ -40,12 +40,12 @@ public class FavouriteService {
 
     }
 
-    public IPage<Favourites> selectByPage(UserDTO user, Integer page) {
+    public Page<Favourites> selectByPage(UserDTO user, Integer page) {
         QueryWrapper<Favourites> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("collector_id", user.getId());
         Page<Favourites> pages = new Page<>(page, 6);
-        IPage<Favourites> favouritesIPage = favouriteMapper.selectPage(pages, queryWrapper);
-        return favouritesIPage;
+        Page<Favourites> favouritesPage = favouriteMapper.selectPage(pages, queryWrapper);
+        return favouritesPage;
     }
 
     public void cancelOne(Integer doc_id, Integer user_id) {

@@ -1,6 +1,7 @@
 package com.sankin.diamond.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sankin.diamond.DTO.DeleteDocDTO;
 import com.sankin.diamond.DTO.TeamCheckDTO;
 import com.sankin.diamond.DTO.UserDTO;
@@ -58,9 +59,9 @@ public class WorkController {
      */
     @ResponseBody
     @RequestMapping(value = "/collect/{page}", method = RequestMethod.GET)
-    public IPage<Favourites> favouriteRecord(@PathVariable("page") Integer page, HttpServletRequest request) {
+    public Page<Favourites> favouriteRecord(@PathVariable("page") Integer page, HttpServletRequest request) {
         UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        IPage<Favourites> favourites = favouriteService.selectByPage(user, page);
+        Page<Favourites> favourites = favouriteService.selectByPage(user, page);
         return favourites;
     }
 
@@ -72,9 +73,9 @@ public class WorkController {
      */
     @ResponseBody
     @RequestMapping(value = "/mydoc/{page}", method = RequestMethod.GET)
-    public IPage<Docs> myDocRecord(@PathVariable("page")Integer page, HttpServletRequest request) {
+    public Page<Docs> myDocRecord(@PathVariable("page")Integer page, HttpServletRequest request) {
         UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        IPage<Docs> docs = docsService.selectByPage(user, page);
+        Page<Docs> docs = docsService.selectByPage(user, page);
         return docs;
     }
 
