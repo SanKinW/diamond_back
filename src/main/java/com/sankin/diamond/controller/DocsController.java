@@ -54,15 +54,19 @@ public class DocsController {
                           HttpServletResponse response) {
         //response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
         UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        if(user != null) viewService.createOrUpdate(user.getId(),id, title);
-        else viewService.createOrUpdate(0,id, title);
-        Docs doc = docsService.selectOne(id);
         DocReturnDTO returnDTO = new DocReturnDTO();
+        Docs doc = docsService.selectOne(id);
         BeanUtils.copyProperties(doc, returnDTO);
-        returnDTO.setCollected(favouriteService.findByOne(user, id));
+        if(user != null) {
+            viewService.createOrUpdate(user.getId(),id, title);
+            returnDTO.setCollected(favouriteService.findByOne(user, id));
+        }
+        else {
+            viewService.createOrUpdate(0,id, title);
+            returnDTO.setCollected(0);
+        }
         List<Comments> comments = commentService.selectByDocId(id);
         returnDTO.setComments(comments);
-
         /**
          * 增加一下权限
          */
