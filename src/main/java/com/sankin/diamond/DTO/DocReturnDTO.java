@@ -21,6 +21,7 @@ public class DocReturnDTO {
     private Integer commentCount;
     private Integer collectCount;
     private Integer authority;
+    private Integer updatedId;
     private Integer collected;
     private List<Comments> comments;
 }

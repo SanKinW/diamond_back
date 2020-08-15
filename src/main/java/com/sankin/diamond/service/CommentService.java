@@ -2,8 +2,8 @@ package com.sankin.diamond.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sankin.diamond.DTO.CommentDTO;
-import com.sankin.diamond.DTO.UserDTO;
 import com.sankin.diamond.entity.Comments;
+import com.sankin.diamond.entity.Users;
 import com.sankin.diamond.mapper.CommentsMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class CommentService {
     @Autowired
     private CommentsMapper commentsMapper;
 
-    public void insertOne(CommentDTO commentDTO, UserDTO users) {
+    public void insertOne(CommentDTO commentDTO, Users users) {
         Comments comment = new Comments();
         BeanUtils.copyProperties(commentDTO, comment);
         comment.setCommentator(users.getId());

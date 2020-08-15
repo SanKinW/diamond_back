@@ -37,13 +37,15 @@ public class TeamController {
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/team", method = RequestMethod.POST)
-    public Object createTeam(@RequestBody TeamCreateDTO teamCreateDTO, HttpServletRequest request) {
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+    @RequestMapping(value = "/team/{userId}", method = RequestMethod.POST)
+    public Object createTeam(@RequestBody TeamCreateDTO teamCreateDTO,
+                             @PathVariable("userId") Integer userId,
+                             HttpServletRequest request) {
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
         Team team = new Team();
         BeanUtils.copyProperties(teamCreateDTO, team);
-        team.setCreator(user.getId());
-        String member = "" + user.getId();
+        team.setCreator(userId);
+        String member = "" + userId;
         team.setMembers(member);
         int result = teamService.insertOne(team);
         if (result > 0) return ResultDTO.okOf();
@@ -79,8 +81,8 @@ public class TeamController {
         String[] members = team.getMembers().split(",");
         List<String> memberName = usersService.selectByIds(members);
         returnDTO.setMembersName(memberName);
-        List<SmallDocDTO> docDTOS = docsService.selectByTeamId(id);
-        returnDTO.setDocs(docDTOS);
+        List<SmallDocDTO> docDTOs = docsService.selectByTeamId(id);
+        returnDTO.setDocs(docDTOs);
         return returnDTO;
     }
 
@@ -122,4 +124,20 @@ public class TeamController {
         else notificationService.quit(teamId, userName, 4);
         return ResultDTO.okOf();
     }
+
+    /**
+     * 设置文档权限
+     * @param docId
+     * @param weight
+     * @return
+     */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping(value = "/authority/{docId}/{weight}", method = RequestMethod.GET)
+    public Object setAuthority(@PathVariable("docId") Integer docId,
+                               @PathVariable("weight") Integer weight) {
+        docsService.resetAuthority(docId, weight);
+        return ResultDTO.okOf();
+    }
+
 }

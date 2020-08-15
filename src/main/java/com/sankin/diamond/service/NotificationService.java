@@ -70,9 +70,9 @@ public class NotificationService {
         insertOne(0, user.getId(), type, teamId, team.getTeamName());
     }
 
-    public void newComment(CommentDTO commentDTO, UserDTO user) {
+    public void newComment(CommentDTO commentDTO, Integer userId) {
         Docs doc = docMapper.selectById(commentDTO.getDocId());
         Users receiver = usersMapper.selectById(doc.getCreator());
-        insertOne(user.getId(), receiver.getId(), 5, doc.getId(), doc.getTitle());
+        insertOne(userId, receiver.getId(), 5, doc.getId(), doc.getTitle());
     }
 }

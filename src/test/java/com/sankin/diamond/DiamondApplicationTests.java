@@ -42,7 +42,6 @@ class DiamondApplicationTests {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setContent("niu");
         commentDTO.setDocId(1);
-        commentService.insertOne(commentDTO, userDTO);
     }
 
     @Test

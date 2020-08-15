@@ -13,13 +13,12 @@ public class Docs {
     private String title;
     private String content;
     private Integer creator;
-    @TableField(fill = FieldFill.INSERT)
     private Timestamp createTime;
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Timestamp updateTime;
     private Integer teamId;
     private Integer commentCount;
     private Integer collectCount;
     private Integer authority;
     private Integer deleted;
+    private Integer updatedId;
 }

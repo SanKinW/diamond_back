@@ -8,15 +8,15 @@ import com.sankin.diamond.DTO.UserDTO;
 import com.sankin.diamond.DTO.ViewDTO;
 import com.sankin.diamond.entity.Docs;
 import com.sankin.diamond.entity.Favourites;
+import com.sankin.diamond.entity.Users;
 import com.sankin.diamond.entity.Views;
-import com.sankin.diamond.service.DocsService;
-import com.sankin.diamond.service.FavouriteService;
-import com.sankin.diamond.service.TeamService;
-import com.sankin.diamond.service.ViewService;
+import com.sankin.diamond.service.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +38,9 @@ public class WorkController {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private UsersService usersService;
+
     /**
      * 最近浏览文档
      * @param request
@@ -45,10 +48,10 @@ public class WorkController {
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/views", method = RequestMethod.GET)
-    public List<Views> browsingRecord(HttpServletRequest request) {
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        List<Views> views = viewService.selectById(user.getId());
+    @RequestMapping(value = "/views/{userId}", method = RequestMethod.GET)
+    public List<Views> browsingRecord(@PathVariable("userId") Integer userId, HttpServletRequest request) {
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        List<Views> views = viewService.selectById(userId);
         return views;
     }
 
@@ -60,10 +63,12 @@ public class WorkController {
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/collect/{page}", method = RequestMethod.GET)
-    public Page<Favourites> favouriteRecord(@PathVariable("page") Integer page, HttpServletRequest request) {
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        Page<Favourites> favourites = favouriteService.selectByPage(user, page);
+    @RequestMapping(value = "/collect/{page}/{userId}", method = RequestMethod.GET)
+    public Page<Favourites> favouriteRecord(@PathVariable("page") Integer page,
+                                            @PathVariable("userId") Integer userId,
+                                            HttpServletRequest request) {
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        Page<Favourites> favourites = favouriteService.selectByPage(userId, page);
         return favourites;
     }
 
@@ -75,10 +80,12 @@ public class WorkController {
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/mydoc/{page}", method = RequestMethod.GET)
-    public Page<Docs> myDocRecord(@PathVariable("page")Integer page, HttpServletRequest request) {
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        Page<Docs> docs = docsService.selectByPage(user, page);
+    @RequestMapping(value = "/mydoc/{page}/{userId}", method = RequestMethod.GET)
+    public Page<Docs> myDocRecord(@PathVariable("page")Integer page,
+                                  @PathVariable("userId") Integer userId,
+                                  HttpServletRequest request) {
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        Page<Docs> docs = docsService.selectByPage(userId, page);
         return docs;
     }
 
@@ -89,10 +96,18 @@ public class WorkController {
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/myteam", method = RequestMethod.GET)
-    public List<TeamCheckDTO> myTeamRecord(HttpServletRequest request) {
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        List<TeamCheckDTO> checkDTOS = teamService.selectByIds(user.getTeams());
+    @RequestMapping(value = "/myteam/{userId}", method = RequestMethod.GET)
+    public List<TeamCheckDTO> myTeamRecord(@PathVariable("userId") Integer userId,HttpServletRequest request) {
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        Users user = usersService.selectById(userId);
+        String regex = ",";
+        List<Integer> ids = new ArrayList<>();
+        String[] temp = user.getTeamIds().split(regex);
+        for (String id:temp) {
+            Integer num = Integer.parseInt(id);
+            ids.add(num);
+        }
+        List<TeamCheckDTO> checkDTOS = teamService.selectByIds(ids);
         return checkDTOS;
     }
 
@@ -103,10 +118,11 @@ public class WorkController {
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/recycle", method = RequestMethod.GET)
-    public List<DeleteDocDTO> recycle(HttpServletRequest request) {
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        List<DeleteDocDTO> deleteDocDTOS = docsService.selectDeletedByCreator(user.getId());
+    @RequestMapping(value = "/recycle/{userId}", method = RequestMethod.GET)
+    public List<DeleteDocDTO> recycle(@PathVariable("userId") Integer userId,
+                                      HttpServletRequest request) {
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        List<DeleteDocDTO> deleteDocDTOS = docsService.selectDeletedByCreator(userId);
         return deleteDocDTOS;
     }
 }

@@ -82,12 +82,14 @@ public class DocsController {
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/doc", method = RequestMethod.POST)
-    public Object createDoc(@RequestBody DocCreateDTO docCreateDTO, HttpServletRequest request) {
-        Users user = (Users) request.getSession().getAttribute("user");
+    @RequestMapping(value = "/doc/{userId}", method = RequestMethod.POST)
+    public Object createDoc(@RequestBody DocCreateDTO docCreateDTO,
+                            @PathVariable("userId") Integer userId,
+                            HttpServletRequest request) {
+        //Users user = (Users) request.getSession().getAttribute("user");
         Docs docs = new Docs();
         BeanUtils.copyProperties(docCreateDTO, docs);
-        docs.setCreator(user.getId());
+        docs.setCreator(userId);
         int result = docsService.insertOne(docs);
         if (result > 0) return ResultDTO.okOf();
         else return ResultDTO.errorOf(new ErrorException(ErrorType.PUBLISH_ERROR));
@@ -97,19 +99,21 @@ public class DocsController {
      * 更新文档
      * @param docCreateDTO
      * @param request
-     * @param id
+     * @param docId
      * @return
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/doc/{id}",method = RequestMethod.POST)
+    @RequestMapping(value = "/doc/{docId}/{userId}",method = RequestMethod.POST)
     public Object updateDoc(@RequestBody DocCreateDTO docCreateDTO,
                              HttpServletRequest request,
-                             @PathVariable("id") Integer id) {
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+                             @PathVariable("docId") Integer docId,
+                             @PathVariable("userId") Integer userId) {
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
         Docs docs = new Docs();
         BeanUtils.copyProperties(docCreateDTO, docs);
-        docs.setId(id);
+        docs.setId(docId);
+        docs.setUpdatedId(docId);
         int result = docsService.updateOne(docs);
         if (result > 0) return ResultDTO.okOf();
         else return ResultDTO.errorOf(new ErrorException(ErrorType.UPDATE_FAILED));
@@ -117,35 +121,38 @@ public class DocsController {
 
     /**
      * 收藏文档
-     * @param id
+     * @param docId
      * @param request
      * @return
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/collect/{id}/{title}",method = RequestMethod.GET)
-    public Object collectDoc(@PathVariable("id") Integer id,
+    @RequestMapping(value = "/collect/{docId}/{title}/{userId}",method = RequestMethod.GET)
+    public Object collectDoc(@PathVariable("docId") Integer docId,
                              @PathVariable("title")String title,
+                             @PathVariable("userId") Integer userId,
                              HttpServletRequest request) {
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        favouriteService.createOne(user, id, title);
-        docsService.incLike(id);
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        favouriteService.createOne(userId, docId, title);
+        docsService.incLike(docId);
         return ResultDTO.okOf();
     }
 
     /**
      * 取消收藏
-     * @param id
+     * @param docId
      * @param request
      * @return
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/cancel/{id}",method = RequestMethod.GET)
-    public Object cancelCollectDoc(@PathVariable("id") Integer id, HttpServletRequest request) {
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        favouriteService.cancelOne(id, user.getId());
-        docsService.decLike(id);
+    @RequestMapping(value = "/cancel/{docId}/{userId}",method = RequestMethod.GET)
+    public Object cancelCollectDoc(@PathVariable("docId") Integer docId,
+                                   @PathVariable("userId") Integer userId,
+                                   HttpServletRequest request) {
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        favouriteService.cancelOne(docId, userId);
+        docsService.decLike(docId);
         return ResultDTO.okOf();
     }
     /**

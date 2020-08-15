@@ -54,9 +54,9 @@ public class DocsService {
         docMapper.updateById(doc);
     }
 
-    public Page<Docs> selectByPage(UserDTO user, Integer page) {
+    public Page<Docs> selectByPage(Integer userId, Integer page) {
         QueryWrapper<Docs> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("creator", user.getId()).select("id","title","collect_count","authority");
+        queryWrapper.eq("creator", userId).select("id","title","collect_count","authority");
         Page<Docs> docs = new Page<>(page, 6);
         Page<Docs> docsPage = docMapper.selectPage(docs, queryWrapper);
         return docsPage;
@@ -126,5 +126,11 @@ public class DocsService {
         UpdateWrapper<Docs> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("team_id",id);
         docMapper.update(doc, updateWrapper);
+    }
+
+    public void resetAuthority(Integer docId, Integer weight) {
+        Docs doc = docMapper.selectById(docId);
+        doc.setAuthority(weight);
+        docMapper.updateById(doc);
     }
 }

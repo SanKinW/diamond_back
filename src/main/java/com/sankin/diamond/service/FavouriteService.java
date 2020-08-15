@@ -21,10 +21,10 @@ public class FavouriteService {
     @Autowired
     private FavouriteMapper favouriteMapper;
 
-    public void createOne(UserDTO user, Integer id, String title) {
+    public void createOne(Integer userId, Integer docId, String title) {
         Favourites favourites = new Favourites();
-        favourites.setCollectorId(user.getId());
-        favourites.setDocId(id);
+        favourites.setCollectorId(userId);
+        favourites.setDocId(docId);
         favourites.setCollectTime(new Timestamp(new Date().getTime()));
         favourites.setDocTitle(title);
         favouriteMapper.insert(favourites);
@@ -40,9 +40,9 @@ public class FavouriteService {
 
     }
 
-    public Page<Favourites> selectByPage(UserDTO user, Integer page) {
+    public Page<Favourites> selectByPage(Integer userId, Integer page) {
         QueryWrapper<Favourites> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("collector_id", user.getId());
+        queryWrapper.eq("collector_id", userId);
         Page<Favourites> pages = new Page<>(page, 6);
         Page<Favourites> favouritesPage = favouriteMapper.selectPage(pages, queryWrapper);
         return favouritesPage;
