@@ -1,10 +1,15 @@
 package com.sankin.diamond.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.sankin.diamond.DTO.LogDTO;
-import com.sankin.diamond.DTO.UserDTO;
+import com.sankin.diamond.DTO.*;
+import com.sankin.diamond.entity.Docs;
+import com.sankin.diamond.entity.Notification;
+import com.sankin.diamond.entity.Team;
 import com.sankin.diamond.entity.Users;
+import com.sankin.diamond.exception.ErrorType;
+import com.sankin.diamond.mapper.TeamMapper;
 import com.sankin.diamond.mapper.UsersMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +19,9 @@ import java.util.*;
 public class UsersService {
     @Autowired
     private UsersMapper usersMapper;
+
+    @Autowired
+    private TeamMapper teamMapper;
 
     public Users checkLog(LogDTO logDTO) {
         Map<String, Object> columnMap = new HashMap<>();
@@ -109,5 +117,49 @@ public class UsersService {
         }
         user.setTeamIds(newIds);
         usersMapper.updateById(user);
+    }
+
+    public List<NotificationDTO> addName(List<Notification> notifications) {
+        List<NotificationDTO> notificationDTOS = new ArrayList<>();
+        for (Notification notification:notifications) {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            BeanUtils.copyProperties(notification, notificationDTO);
+            String notifierName = usersMapper.selectById(notification.getNotifier()).getUserName();
+            String receiverName = usersMapper.selectById(notification.getReceiver()).getUserName();
+            notificationDTO.setNotifierName(notifierName);
+            notificationDTO.setReceiverName(receiverName);
+            notificationDTOS.add(notificationDTO);
+        }
+        return notificationDTOS;
+    }
+
+    public void setDocAuthority(DocReturnDTO returnDTO, Integer commented, Integer shared, Integer modified) {
+        returnDTO.setCommented(commented);
+        returnDTO.setShared(shared);
+        returnDTO.setModified(modified);
+    }
+
+    public void setAuthority(DocReturnDTO returnDTO, Docs doc, Integer userId) {
+        if (doc.getTeamId() != null && doc.getTeamId() > 0) {
+            Team team = teamMapper.selectById(doc.getTeamId());
+            String[] members = team.getMembers().split(",");
+            for(int i = 0; i < members.length; ++i) {
+                int num = Integer.parseInt(members[i]);
+                if (num == userId) setDocAuthority(returnDTO, 1, 1, 1);
+                returnDTO.setResultDTO(ResultDTO.okOf());
+                return;
+            }
+        }
+        int authority = doc.getAuthority();
+        int num[] = new int[4];
+        int count = 0;
+        while (authority != 0) {
+            num[count] = authority&1;
+            count++;
+            authority = authority >> 1;
+        }
+        setDocAuthority(returnDTO, num[1], num[2], num[3]);
+        if (num[0] == 0) returnDTO.setResultDTO(ResultDTO.errorOf(ErrorType.READ_NOTIFICATION_FAILED));
+        else returnDTO.setResultDTO(ResultDTO.okOf());
     }
 }

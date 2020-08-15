@@ -18,4 +18,5 @@ public class UserDTO {
     private String telephone;
     private String email;
     private List<Integer> teams;
+    private Integer unRead;
 }

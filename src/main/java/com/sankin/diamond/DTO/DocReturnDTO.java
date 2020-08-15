@@ -24,4 +24,9 @@ public class DocReturnDTO {
     private Integer updatedId;
     private Integer collected;
     private List<Comments> comments;
+    private Integer commented;//可评论
+    private Integer shared;//可分享
+    private Integer modified;//可修改
+    private Integer edited;//此时可编辑，避免编辑冲突
+    private ResultDTO resultDTO;//返回状态
 }

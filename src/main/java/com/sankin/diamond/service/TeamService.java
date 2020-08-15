@@ -1,10 +1,13 @@
 package com.sankin.diamond.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sankin.diamond.DTO.TeamCheckDTO;
+import com.sankin.diamond.DTO.TeamReturnDTO;
 import com.sankin.diamond.entity.Team;
 import com.sankin.diamond.entity.Users;
 import com.sankin.diamond.mapper.TeamMapper;
 import com.sankin.diamond.mapper.UsersMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +60,18 @@ public class TeamService {
         Map<String, Object> columnMap = new HashMap<>();
         columnMap.put("user_name", userName);
         Users user = usersMapper.selectByMap(columnMap).get(0);
+    }
+
+    public List<TeamReturnDTO> selectByTeamName(String teamName) {
+        QueryWrapper<Team> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like("team_name", teamName);
+        List<Team> teams = teamMapper.selectList(queryWrapper);
+        List<TeamReturnDTO> teamReturnDTOS = new ArrayList<>();
+        for (Team team:teams) {
+            TeamReturnDTO teamReturnDTO = new TeamReturnDTO();
+            BeanUtils.copyProperties(team, teamReturnDTO);
+            teamReturnDTOS.add(teamReturnDTO);
+        }
+        return teamReturnDTOS;
     }
 }

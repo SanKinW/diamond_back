@@ -1,7 +1,7 @@
 package com.sankin.diamond.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sankin.diamond.DTO.CommentDTO;
-import com.sankin.diamond.DTO.UserDTO;
 import com.sankin.diamond.entity.Docs;
 import com.sankin.diamond.entity.Notification;
 import com.sankin.diamond.entity.Team;
@@ -74,5 +74,22 @@ public class NotificationService {
         Docs doc = docMapper.selectById(commentDTO.getDocId());
         Users receiver = usersMapper.selectById(doc.getCreator());
         insertOne(userId, receiver.getId(), 5, doc.getId(), doc.getTitle());
+    }
+
+    public Integer unRead(Integer id) {
+        QueryWrapper<Notification> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("receiver", id).eq("status",0);
+        return notificationMapper.selectCount(queryWrapper);
+    }
+
+    public List<Notification> selectByReceiver(Integer userId) {
+        QueryWrapper<Notification> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("receiver", userId).eq("status",0).orderByDesc("create_time");
+        List<Notification> notifications = notificationMapper.selectList(queryWrapper);
+        for (Notification notification:notifications) {
+            notification.setStatus(1);
+            notificationMapper.updateById(notification);
+        }
+        return notifications;
     }
 }

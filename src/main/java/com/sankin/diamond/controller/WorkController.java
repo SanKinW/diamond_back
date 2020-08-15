@@ -1,17 +1,11 @@
 package com.sankin.diamond.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sankin.diamond.DTO.DeleteDocDTO;
+import com.sankin.diamond.DTO.NotificationDTO;
 import com.sankin.diamond.DTO.TeamCheckDTO;
-import com.sankin.diamond.DTO.UserDTO;
-import com.sankin.diamond.DTO.ViewDTO;
-import com.sankin.diamond.entity.Docs;
-import com.sankin.diamond.entity.Favourites;
-import com.sankin.diamond.entity.Users;
-import com.sankin.diamond.entity.Views;
+import com.sankin.diamond.entity.*;
 import com.sankin.diamond.service.*;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +34,9 @@ public class WorkController {
 
     @Autowired
     private UsersService usersService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     /**
      * 最近浏览文档
@@ -124,5 +121,19 @@ public class WorkController {
         //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
         List<DeleteDocDTO> deleteDocDTOS = docsService.selectDeletedByCreator(userId);
         return deleteDocDTOS;
+    }
+
+    /**
+     * 消息通知中心
+     * @param userId
+     * @return
+     */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping(value = "/notification/{userId}", method = RequestMethod.GET)
+    public List<NotificationDTO> notificationCenter(@PathVariable("userId") Integer userId) {
+        List<Notification> notifications = notificationService.selectByReceiver(userId);
+        List<NotificationDTO> notificationDTOS = usersService.addName(notifications);
+        return notificationDTOS;
     }
 }

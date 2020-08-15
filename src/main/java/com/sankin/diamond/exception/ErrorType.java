@@ -9,7 +9,8 @@ public enum  ErrorType implements ErrorCode{
     UPDATE_FAILED(2006,"文档更新失败"),
     TEAM_CREATE_FAILED(2007,"团队创建失败"),
     TEAM_JOIN_FAILED(2008,"加入团队失败"),
-    READ_NOTIFICATION_FAILED(20018, "你无权访问该信息");
+    READ_NOTIFICATION_FAILED(2009, "你无权访问该文档"),
+    SOMEONE_EDITING(2010, "有人正在编辑文档，你无法进行修改");
 
     @Override
     public Integer getType() {

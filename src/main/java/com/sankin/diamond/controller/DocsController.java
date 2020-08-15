@@ -6,13 +6,9 @@ import com.sankin.diamond.DTO.ResultDTO;
 import com.sankin.diamond.DTO.UserDTO;
 import com.sankin.diamond.entity.Comments;
 import com.sankin.diamond.entity.Docs;
-import com.sankin.diamond.entity.Users;
 import com.sankin.diamond.exception.ErrorException;
 import com.sankin.diamond.exception.ErrorType;
-import com.sankin.diamond.service.CommentService;
-import com.sankin.diamond.service.DocsService;
-import com.sankin.diamond.service.FavouriteService;
-import com.sankin.diamond.service.ViewService;
+import com.sankin.diamond.service.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +35,9 @@ public class DocsController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private UsersService usersService;
+
     /**
      * 查看文档
      * @param id
@@ -56,7 +55,23 @@ public class DocsController {
         UserDTO user = (UserDTO) request.getSession().getAttribute("user");
         DocReturnDTO returnDTO = new DocReturnDTO();
         Docs doc = docsService.selectOne(id);
-        BeanUtils.copyProperties(doc, returnDTO);
+        if (doc.getAuthority() == 0 && (doc.getTeamId() == 0 || doc.getTeamId() == null)) {
+            if (user.getId() == doc.getCreator()) {
+                returnDTO.setShared(0);
+                returnDTO.setCommented(0);
+                returnDTO.setModified(1);
+                returnDTO.setEdited(1);
+                returnDTO.setResultDTO(ResultDTO.okOf());
+            }
+            else {
+                returnDTO.setResultDTO(ResultDTO.errorOf(ErrorType.READ_NOTIFICATION_FAILED));
+            }
+        }
+        else {
+            //usersService.setAuthority(returnDTO, doc, user.getId());
+            usersService.setAuthority(returnDTO, doc, 1);
+        }
+        if (returnDTO.getResultDTO().getType() == 200) BeanUtils.copyProperties(doc, returnDTO);
         if(user != null) {
             viewService.createOrUpdate(user.getId(),id, title);
             returnDTO.setCollected(favouriteService.findByOne(user, id));
@@ -93,6 +108,21 @@ public class DocsController {
         int result = docsService.insertOne(docs);
         if (result > 0) return ResultDTO.okOf();
         else return ResultDTO.errorOf(new ErrorException(ErrorType.PUBLISH_ERROR));
+    }
+
+    /**
+     * 编辑文档前的状态查看
+     * @param docId
+     * @return
+     */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping(value = "/doc/{docId}",method = RequestMethod.GET)
+    public Object changeDocEdited(@PathVariable("docId") Integer docId) {
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        int result = docsService.updateEdited(docId);
+        if (result == 1) return ResultDTO.okOf();
+        else return ResultDTO.errorOf(ErrorType.SOMEONE_EDITING);
     }
 
     /**

@@ -140,4 +140,16 @@ public class TeamController {
         return ResultDTO.okOf();
     }
 
+    /**
+     * 搜索团队
+     * @param teamName
+     * @return
+     */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping(value = "/search/{teamName}", method = RequestMethod.GET)
+    public List<TeamReturnDTO> searchTeam(@PathVariable("teamName") String teamName) {
+        List<TeamReturnDTO> teamReturnDTOS = teamService.selectByTeamName(teamName);
+        return teamReturnDTOS;
+    }
 }

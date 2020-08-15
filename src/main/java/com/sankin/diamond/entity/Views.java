@@ -13,6 +13,5 @@ public class Views {
     private Integer viewerId;
     private Integer docId;
     private String docTitle;
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Timestamp latestTime;
 }

@@ -14,6 +14,5 @@ public class Team {
     private String basicInformation;
     private Integer creator;
     private String members;
-    @TableField(fill = FieldFill.INSERT)
     private Timestamp createTime;
 }

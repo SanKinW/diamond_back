@@ -21,4 +21,5 @@ public class Docs {
     private Integer authority;
     private Integer deleted;
     private Integer updatedId;
+    private Integer edited;
 }

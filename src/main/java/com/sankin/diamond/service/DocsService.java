@@ -133,4 +133,12 @@ public class DocsService {
         doc.setAuthority(weight);
         docMapper.updateById(doc);
     }
+
+    public int updateEdited(Integer docId) {
+        Docs doc = docMapper.selectById(docId);
+        if (doc.getEdited() == 1) return 0;
+        doc.setEdited(1);
+        docMapper.updateById(doc);
+        return 1;
+    }
 }
