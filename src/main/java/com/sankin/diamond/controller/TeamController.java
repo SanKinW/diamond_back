@@ -81,6 +81,7 @@ public class TeamController {
         String[] members = team.getMembers().split(",");
         List<String> memberName = usersService.selectByIds(members);
         returnDTO.setMembersName(memberName);
+        returnDTO.setCreatorName(usersService.getNameById(team.getCreator()));
         List<SmallDocDTO> docDTOs = docsService.selectByTeamId(id);
         returnDTO.setDocs(docDTOs);
         return returnDTO;

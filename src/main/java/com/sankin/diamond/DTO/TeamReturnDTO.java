@@ -11,6 +11,7 @@ public class TeamReturnDTO {
     private String teamName;
     private String basicInformation;
     private Integer creator;
+    private String creatorName;
     private List<String> membersName;
     private Timestamp createTime;
     private List<SmallDocDTO> docs;

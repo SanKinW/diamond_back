@@ -162,4 +162,9 @@ public class UsersService {
         if (num[0] == 0) returnDTO.setResultDTO(ResultDTO.errorOf(ErrorType.READ_NOTIFICATION_FAILED));
         else returnDTO.setResultDTO(ResultDTO.okOf());
     }
+
+    public String getNameById(Integer creator) {
+        Users user = usersMapper.selectById(creator);
+        return user.getUserName();
+    }
 }

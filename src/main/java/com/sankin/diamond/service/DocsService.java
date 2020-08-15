@@ -56,7 +56,7 @@ public class DocsService {
 
     public Page<Docs> selectByPage(Integer userId, Integer page) {
         QueryWrapper<Docs> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("creator", userId).select("id","title","collect_count","authority");
+        queryWrapper.eq("creator", userId).eq("deleted",0);
         Page<Docs> docs = new Page<>(page, 6);
         Page<Docs> docsPage = docMapper.selectPage(docs, queryWrapper);
         return docsPage;
@@ -86,6 +86,7 @@ public class DocsService {
     public List<SmallDocDTO> selectByTeamId(Integer id) {
         Map<String, Object> columnMap = new HashMap<>();
         columnMap.put("team_id", id);
+        columnMap.put("deleted", 0);
         List<Docs> docs = docMapper.selectByMap(columnMap);
         List<SmallDocDTO> smallDocDTOS = new ArrayList<>();
         for (Docs doc : docs) {
@@ -140,5 +141,16 @@ public class DocsService {
         doc.setEdited(1);
         docMapper.updateById(doc);
         return 1;
+    }
+
+    public void deleteAll(Integer userId) {
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("creator", userId);
+        columnMap.put("deleted", 1);
+        usersMapper.deleteByMap(columnMap);
+    }
+
+    public void deleteComplete(Integer docId) {
+        docMapper.deleteById(docId);
     }
 }

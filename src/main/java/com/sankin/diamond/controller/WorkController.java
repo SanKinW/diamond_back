@@ -3,6 +3,7 @@ package com.sankin.diamond.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sankin.diamond.DTO.DeleteDocDTO;
 import com.sankin.diamond.DTO.NotificationDTO;
+import com.sankin.diamond.DTO.ResultDTO;
 import com.sankin.diamond.DTO.TeamCheckDTO;
 import com.sankin.diamond.entity.*;
 import com.sankin.diamond.service.*;
@@ -123,6 +124,37 @@ public class WorkController {
         return deleteDocDTOS;
     }
 
+    /**
+     * 一键清空回收站
+     * @param userId
+     * @param request
+     * @return
+     */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping(value = "/deletedAll/{userId}", method = RequestMethod.GET)
+    public Object deleteAll(@PathVariable("userId") Integer userId,
+                                      HttpServletRequest request) {
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        docsService.deleteAll(userId);
+        return ResultDTO.okOf();
+    }
+
+    /**
+     * 在回收站逐个删除
+     * @param docId
+     * @param request
+     * @return
+     */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping(value = "/deletedOne/{docId}", method = RequestMethod.GET)
+    public Object deleteOne(@PathVariable("docId") Integer docId,
+                            HttpServletRequest request) {
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        docsService.deleteComplete(docId);
+        return ResultDTO.okOf();
+    }
     /**
      * 消息通知中心
      * @param userId

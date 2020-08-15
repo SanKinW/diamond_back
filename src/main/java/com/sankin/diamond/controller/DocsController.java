@@ -55,6 +55,10 @@ public class DocsController {
         UserDTO user = (UserDTO) request.getSession().getAttribute("user");
         DocReturnDTO returnDTO = new DocReturnDTO();
         Docs doc = docsService.selectOne(id);
+        if (doc == null) {
+            returnDTO.setResultDTO(ResultDTO.errorOf(ErrorType.DOC_DELETED));
+            return returnDTO;
+        }
         if (doc.getAuthority() == 0 && (doc.getTeamId() == 0 || doc.getTeamId() == null)) {
             if (user.getId() == doc.getCreator()) {
                 returnDTO.setShared(0);
