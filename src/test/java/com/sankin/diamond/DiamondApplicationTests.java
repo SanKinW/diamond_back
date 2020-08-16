@@ -1,14 +1,8 @@
 package com.sankin.diamond;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.sankin.diamond.DTO.CommentDTO;
-import com.sankin.diamond.DTO.DocReturnDTO;
-import com.sankin.diamond.DTO.LogDTO;
-import com.sankin.diamond.DTO.UserDTO;
-import com.sankin.diamond.entity.Docs;
-import com.sankin.diamond.entity.Favourites;
-import com.sankin.diamond.entity.Users;
-import com.sankin.diamond.entity.Views;
+import com.sankin.diamond.DTO.*;
+import com.sankin.diamond.entity.*;
 import com.sankin.diamond.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
@@ -34,14 +28,13 @@ class DiamondApplicationTests {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private TeamService teamService;
+
     @Test
     void contextLoads() {
-        Users user = usersService.selectById(1);
-        UserDTO userDTO = new UserDTO();
-        BeanUtils.copyProperties(user, userDTO);
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setContent("niu");
-        commentDTO.setDocId(1);
+        List<SmallDocDTO> smallDocDTOS = docsService.selectByTeamId(1);
+        System.out.println(smallDocDTOS);
     }
 
     @Test
