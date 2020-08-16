@@ -90,4 +90,11 @@ public class TeamService {
         }
         return teamDTOS;
     }
+
+    public int selectByTime(Integer userId) {
+        QueryWrapper<Team> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("creator", userId).orderByDesc("create_time");
+        List<Team> teams = teamMapper.selectList(queryWrapper);
+        return teams.get(0).getId();
+    }
 }

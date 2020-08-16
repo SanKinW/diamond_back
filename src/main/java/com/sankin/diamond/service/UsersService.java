@@ -180,4 +180,12 @@ public class UsersService {
             teamDTO.setCreatorName(user.getUserName());
         }
     }
+
+
+    public void appendTeam(Integer userId, int teamId) {
+        Users user = usersMapper.selectById(userId);
+        String teamIds = "" + teamId;
+        user.setTeamIds(teamIds);
+        usersMapper.updateById(user);
+    }
 }
