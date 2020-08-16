@@ -1,9 +1,12 @@
 package com.sankin.diamond.interceptor;
 
+import com.sankin.diamond.DTO.SmallTeamDTO;
 import com.sankin.diamond.DTO.UserDTO;
 import com.sankin.diamond.entity.Users;
 import com.sankin.diamond.mapper.UsersMapper;
 import com.sankin.diamond.service.NotificationService;
+import com.sankin.diamond.service.TeamService;
+import com.sankin.diamond.service.UsersService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +20,13 @@ import java.util.*;
 @Service
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
-    private UsersMapper usersMapper;
+    private UsersService usersService;
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private TeamService teamService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -29,21 +35,14 @@ public class SessionInterceptor implements HandlerInterceptor {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
-                    Map<String, Object> columnMap = new HashMap<>();
-                    columnMap.put("token", token);
-                    List<Users> users = usersMapper.selectByMap(columnMap);
+                    List<Users> users = usersService.selectByMap(token);
                     if (users.size() != 0) {
                         Users user = users.get(0);
                         UserDTO userDTO = new UserDTO();
                         BeanUtils.copyProperties(user,userDTO);
-                        String regex = ",";
-                        List<Integer> ids = new ArrayList<>();
-                        String[] temp = user.getTeamIds().split(regex);
-                        for (String id:temp) {
-                            Integer num = Integer.parseInt(id);
-                            ids.add(num);
-                        }
-                        userDTO.setTeams(ids);
+                        List<SmallTeamDTO> teamDTOS = teamService.setBasicByIds(user.getTeamIds());
+                        usersService.setNameByIds(teamDTOS);
+                        userDTO.setTeams(teamDTOS);
                         userDTO.setUnRead(notificationService.unRead(user.getId()));
                         request.getSession().setAttribute("user", userDTO);
                     }

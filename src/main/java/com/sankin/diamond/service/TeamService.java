@@ -1,6 +1,7 @@
 package com.sankin.diamond.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.sankin.diamond.DTO.SmallTeamDTO;
 import com.sankin.diamond.DTO.TeamCheckDTO;
 import com.sankin.diamond.DTO.TeamReturnDTO;
 import com.sankin.diamond.entity.Team;
@@ -21,6 +22,7 @@ public class TeamService {
 
     @Autowired
     private UsersMapper usersMapper;
+
 
     public int insertOne(Team team) {
         team.setCreateTime(new Timestamp(new Date().getTime()));
@@ -73,5 +75,19 @@ public class TeamService {
             teamReturnDTOS.add(teamReturnDTO);
         }
         return teamReturnDTOS;
+    }
+
+    public List<SmallTeamDTO> setBasicByIds(String teamIds) {
+        List<SmallTeamDTO> teamDTOS = new ArrayList<>();
+        String regex = ",";
+        String[] temp = teamIds.split(regex);
+        for (String id:temp) {
+            Integer teamId = Integer.parseInt(id);
+            Team team = teamMapper.selectById(teamId);
+            SmallTeamDTO smallTeamDTO = new SmallTeamDTO();
+            BeanUtils.copyProperties(team, smallTeamDTO);
+            teamDTOS.add(smallTeamDTO);
+        }
+        return teamDTOS;
     }
 }

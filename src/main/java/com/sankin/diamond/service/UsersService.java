@@ -167,4 +167,17 @@ public class UsersService {
         Users user = usersMapper.selectById(creator);
         return user.getUserName();
     }
+
+    public List<Users> selectByMap(String token) {
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("token", token);
+        return usersMapper.selectByMap(columnMap);
+    }
+
+    public void setNameByIds(List<SmallTeamDTO> teamDTOS) {
+        for (SmallTeamDTO teamDTO : teamDTOS) {
+            Users user = usersMapper.selectById(teamDTO.getCreator());
+            teamDTO.setCreatorName(user.getUserName());
+        }
+    }
 }

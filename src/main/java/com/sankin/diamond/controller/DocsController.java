@@ -86,10 +86,6 @@ public class DocsController {
         }
         List<Comments> comments = commentService.selectByDocId(id);
         returnDTO.setComments(comments);
-        /**
-         * 增加一下权限
-         */
-        System.out.println(doc.getTitle());
         return returnDTO;
     }
 
@@ -148,6 +144,7 @@ public class DocsController {
         BeanUtils.copyProperties(docCreateDTO, docs);
         docs.setId(docId);
         docs.setUpdatedId(docId);
+        docs.setEdited(0);
         int result = docsService.updateOne(docs);
         if (result > 0) return ResultDTO.okOf();
         else return ResultDTO.errorOf(new ErrorException(ErrorType.UPDATE_FAILED));
