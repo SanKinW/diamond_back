@@ -50,7 +50,7 @@ public class TeamController {
         int result = teamService.insertOne(team);
         if (result > 0) {
             int teamId = teamService.selectByTime(userId);
-            usersService.appendTeam(userId, teamId);
+            usersService.updateTeams(userId,teamId);
             return ResultDTO.okOf();
         }
         else return ResultDTO.errorOf(new ErrorException(ErrorType.TEAM_CREATE_FAILED));
