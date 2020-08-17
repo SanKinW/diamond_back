@@ -111,4 +111,8 @@ public class TeamService {
         List<Team> teams = teamMapper.selectList(queryWrapper);
         return teams.get(0).getId();
     }
+
+    public int getCreatorById(Integer teamId) {
+        return teamMapper.selectById(teamId).getCreator();
+    }
 }

@@ -124,6 +124,9 @@ public class TeamController {
                            HttpServletRequest request) {
         usersService.quitTeam(userName, teamId);
         teamService.clearUser(userName, teamId);
+        int teamCreator = teamService.getCreatorById(teamId);
+        int docCreator = usersService.getIdByName(userName);
+        docsService.updateCreator(docCreator, teamId, teamCreator);
         UserDTO user = (UserDTO) request.getSession().getAttribute("user");
         if (user.getUserName().equals(userName)) notificationService.quit(teamId, userName, 3);
         else notificationService.quit(teamId, userName, 4);

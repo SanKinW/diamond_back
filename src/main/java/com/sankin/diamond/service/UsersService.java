@@ -185,4 +185,9 @@ public class UsersService {
     }
 
 
+    public int getIdByName(String userName) {
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("user_name", userName);
+        return usersMapper.selectByMap(columnMap).get(0).getId();
+    }
 }

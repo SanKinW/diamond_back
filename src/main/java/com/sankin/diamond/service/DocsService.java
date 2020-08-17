@@ -153,4 +153,15 @@ public class DocsService {
     public void deleteComplete(Integer docId) {
         docMapper.deleteById(docId);
     }
+
+    public void updateCreator(int docCreator, Integer teamId, int teamCreator) {
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("creator", docCreator);
+        columnMap.put("team_id", teamId);
+        List<Docs> docs = docMapper.selectByMap(columnMap);
+        for (Docs doc : docs) {
+            doc.setCreator(teamCreator);
+            docMapper.updateById(doc);
+        }
+    }
 }
