@@ -18,13 +18,14 @@ public class CommentService {
     @Autowired
     private CommentsMapper commentsMapper;
 
-    public void insertOne(CommentDTO commentDTO, Users users) {
+    public void insertOne(CommentDTO commentDTO, Users user) {
         Comments comment = new Comments();
         BeanUtils.copyProperties(commentDTO, comment);
-        comment.setCommentator(users.getId());
-        comment.setCommentatorName(users.getUserName());
+        comment.setCommentator(user.getId());
+        comment.setCommentatorName(user.getUserName());
         comment.setCommentTime(new Timestamp(new Date().getTime()));
         comment.setLikeCount(0);
+        comment.setAvatarUrl(user.getAvatarUrl());
         commentsMapper.insert(comment);
     }
 

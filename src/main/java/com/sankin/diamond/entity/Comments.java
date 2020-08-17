@@ -18,4 +18,5 @@ public class Comments {
     private String commentatorName;
     private Timestamp commentTime;
     private Integer likeCount;
+    private String avatarUrl;
 }
