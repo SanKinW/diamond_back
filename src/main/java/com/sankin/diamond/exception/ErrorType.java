@@ -11,7 +11,8 @@ public enum  ErrorType implements ErrorCode{
     TEAM_JOIN_FAILED(2008,"加入团队失败"),
     READ_NOTIFICATION_FAILED(2009, "你无权访问该文档"),
     SOMEONE_EDITING(2010, "有人正在编辑文档，你无法进行修改"),
-    DOC_DELETED(2011,"文档已删除");
+    DOC_DELETED(2011,"文档已删除"),
+    USER_HAVE_ENTER(2012,"该用户已加入团队");
 
 
     @Override

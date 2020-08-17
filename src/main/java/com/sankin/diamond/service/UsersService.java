@@ -127,7 +127,11 @@ public class UsersService {
         for (Notification notification:notifications) {
             NotificationDTO notificationDTO = new NotificationDTO();
             BeanUtils.copyProperties(notification, notificationDTO);
-            String notifierName = usersMapper.selectById(notification.getNotifier()).getUserName();
+            Integer notifier = notification.getNotifier();
+            String notifierName = "系统";
+            if (notifier > 0) {
+                notifierName = usersMapper.selectById(notification.getNotifier()).getUserName();
+            }
             String receiverName = usersMapper.selectById(notification.getReceiver()).getUserName();
             notificationDTO.setNotifierName(notifierName);
             notificationDTO.setReceiverName(receiverName);

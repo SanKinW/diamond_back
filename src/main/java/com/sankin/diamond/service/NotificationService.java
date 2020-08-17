@@ -68,6 +68,7 @@ public class NotificationService {
         Users user = usersMapper.selectByMap(columnMap).get(0);
         Team team = teamMapper.selectById(teamId);
         insertOne(0, user.getId(), type, teamId, team.getTeamName());
+        insertOne(user.getId(), team.getCreator(), 11, teamId, team.getTeamName());
     }
 
     public void newComment(CommentDTO commentDTO, Integer userId) {
@@ -91,5 +92,29 @@ public class NotificationService {
             notificationMapper.updateById(notification);
         }
         return notifications;
+    }
+
+    public void teamDismiss(Team team) {
+        String[] members = team.getMembers().split(",");
+        for (String member: members) {
+            Integer userId = Integer.parseInt(member);
+            insertOne(team.getCreator(), userId, 6, team.getId(), team.getTeamName());
+        }
+    }
+
+
+    public void joinReturn(Integer userId, Integer teamId, Integer type) {
+        Team team = teamMapper.selectById(teamId);
+        if (type == 7) insertOne(userId, team.getCreator(), type, teamId, team.getTeamName());
+        else insertOne(team.getCreator(), userId, type, teamId, team.getTeamName());
+    }
+
+    public void refuse(Integer teamId, String userName, Integer type) {
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("user_name", userName);
+        Users user = usersMapper.selectByMap(columnMap).get(0);
+        Team team = teamMapper.selectById(teamId);
+        if (type == 9) insertOne(user.getId(), team.getCreator(), type, teamId, team.getTeamName());
+        else insertOne(team.getCreator(), user.getId(),type, teamId, team.getTeamName());
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -65,6 +66,8 @@ public class TeamController {
     public Object deletedTeam(@PathVariable("id") Integer id) {
         docsService.updateTeam(id);
         usersService.dismiss(id);
+        Team team = teamService.selectById(id);
+        notificationService.teamDismiss(team);
         teamService.deleteById(id);
         return ResultDTO.okOf();
     }
@@ -78,7 +81,7 @@ public class TeamController {
     @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "/team/{id}", method = RequestMethod.GET)
-    public TeamReturnDTO teamInformation(@PathVariable("id")Integer id) {
+    public TeamReturnDTO teamInformation(@PathVariable("id")Integer id, HttpServletRequest request) {
         Team team = teamService.selectById(id);
         TeamReturnDTO returnDTO = new TeamReturnDTO();
         BeanUtils.copyProperties(team, returnDTO);
@@ -86,10 +89,29 @@ public class TeamController {
         List<String> memberName = usersService.selectByIds(members);
         returnDTO.setMembersName(memberName);
         returnDTO.setCreatorName(usersService.getNameById(team.getCreator()));
-        List<SmallDocDTO> docDTOs = docsService.selectByTeamId(id);
+        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        List<SmallDocDTO> docDTOs = new ArrayList<>();
+        if (user != null) docDTOs = docsService.selectByTeamId(id, user.getId());
+        else docDTOs = docsService.selectByTeamId(id, 1);
         returnDTO.setDocs(docDTOs);
         return returnDTO;
     }
+
+    /**
+     * 修改文档权限
+     * @param authority
+     * @param docId
+     * @return
+     */
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping(value = "/modifyAuthority/{docId}", method = RequestMethod.POST)
+    public Object modifyAuthority(@RequestBody Integer authority,
+                                  @PathVariable("docId") Integer docId) {
+        docsService.updateAuthority(docId, authority);
+        return ResultDTO.okOf();
+    }
+
 
     /**
      * 加入团队
@@ -101,7 +123,13 @@ public class TeamController {
     @ResponseBody
     @RequestMapping(value = "/join/{teamId}/{userId}", method = RequestMethod.GET)
     public Object joinTeam(@PathVariable("teamId") Integer teamId,
-                           @PathVariable("userId") Integer userId) {
+                           @PathVariable("userId") Integer userId,
+                           HttpServletRequest request) {
+        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        if (user != null) {
+            if (user.getId() == userId) notificationService.joinReturn(userId, teamId, 7);
+            else notificationService.joinReturn(userId, teamId, 8);
+        }
         int result = teamService.updateMembers(teamId, userId);
         if (result > 0) {
             usersService.updateTeams(userId, teamId);

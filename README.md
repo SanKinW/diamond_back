@@ -121,17 +121,23 @@ path中都省略了localhost:8080
 
 Page可以传回所包含的数据，总页数，总记录数，当前页面，是否有上一页或下一页
 
-Notification的字段解释
+#### Notification的字段解释
+
+| type |         消息类型         | outer_id | outer_title |
+| :--: | :----------------------: | :------: | :---------: |
+|  1   |         团队邀请         | team_id  |  team_name  |
+|  2   |         申请加入         | team_id  |  team_name  |
+|  3   |         自己退出         | team_id  |  team_name  |
+|  4   |         踢出团队         | team_id  |  team_name  |
+|  5   |         评论信息         |  doc_id  |  doc_title  |
+|  6   |         团队解散         | team_id  | team_title  |
+|  7   |         同意邀请         | team_id  | team_title  |
+|  8   |         同意申请         | team_id  | team_title  |
+|  9   |         拒绝邀请         | team_id  | team_title  |
+|  10  |         拒绝申请         | team_id  | team_title  |
+|  11  | 退出团队管理员接受的通知 | team_id  | team_title  |
 
 status{0：未读；1：已读}
-
-| type |  消息类型  | outerId | outerTitle |
-| :--: | :--------: | :-----: | :--------: |
-|  1   |  团队邀请  | team_id | team_name  |
-|  2   |  申请加入  | team_id | team_name  |
-|  3   |  自己退出  | team_id | team_name  |
-|  4   | 被踢出团队 | team_id | team_name  |
-|  5   |    评论    | doc_id  | doc_title  |
 
 #### 文档功能
 
@@ -150,15 +156,16 @@ status{0：未读；1：已读}
 
 #### 团队功能
 
-| interface |            path             | method  |   parameter   |                          return                          |
-| :-------: | :-------------------------: | :-----: | :-----------: | :------------------------------------------------------: |
-| 创建团队  |       /team/{userId}        |  POST   | TeamCreateDTO | ResultDTO{type=200:正常,else:异常},message中含有异常信息 |
-| 解散团队  |      /deleteTeam/{id}       | DELETED |               |                        ResultDTO                         |
-| 查看信息  |         /team/{id}          |   GET   |               |                      TeamReturnDTO                       |
-| 加入团队  |   /join/{teamId}/{userId}   |   GET   |               |                        ResultDTO                         |
-| 退出团队  |  /quit/{teamId}/{userName}  |   GET   |               |                        ResultDTO                         |
-| 设置权限  | /authority/{docId}/{weight} |   GET   |               |                        ResultDTO                         |
-| 搜索团队  |     /search/{teamName}      |   GET   |               |                  List< TeamReturnDTO >                   |
+|  interface   |            path             | method  |   parameter   |                          return                          |
+| :----------: | :-------------------------: | :-----: | :-----------: | :------------------------------------------------------: |
+|   创建团队   |       /team/{userId}        |  POST   | TeamCreateDTO | ResultDTO{type=200:正常,else:异常},message中含有异常信息 |
+|   解散团队   |      /deleteTeam/{id}       | DELETED |               |                        ResultDTO                         |
+|   查看信息   |         /team/{id}          |   GET   |               |                      TeamReturnDTO                       |
+|   加入团队   |   /join/{teamId}/{userId}   |   GET   |               |                        ResultDTO                         |
+|   退出团队   |  /quit/{teamId}/{userName}  |   GET   |               |                        ResultDTO                         |
+|   设置权限   | /authority/{docId}/{weight} |   GET   |               |                        ResultDTO                         |
+|   搜索团队   |     /search/{teamName}      |   GET   |               |                  List< TeamReturnDTO >                   |
+| 修改文档权限 |  /modifyAuthority/{docId}   |  POST   |    Integer    |                        ResultDTO                         |
 
 加入分为主动加入和邀请加入，若管理员或者被邀请者同意，则调用该接口将该用户写入成员列
 
@@ -166,10 +173,12 @@ status{0：未读；1：已读}
 
 #### 通知功能
 
-| interface |            path             | method | parameter |  return   |
-| :-------: | :-------------------------: | :----: | :-------: | :-------: |
-|   邀请    | /invite/{teamId}/{userName} |  GET   |           | ResultDTO |
-|   申请    | /apply/{teamId}/{userName}  |  GET   |           | ResultDTO |
+| interface |                 path                  | method | parameter |  return   |
+| :-------: | :-----------------------------------: | :----: | :-------: | :-------: |
+|   邀请    |      /invite/{teamId}/{userName}      |  GET   |           | ResultDTO |
+|   申请    |      /apply/{teamId}/{userName}       |  GET   |           | ResultDTO |
+| 拒绝邀请  | /refuseInvitation/{teamId}/{userName} |  GET   |           | ResultDTO |
+| 拒绝申请  |   /refuseApply/{teamId}/{userName}    |  GET   |           | ResultDTO |
 
 #### 评论功能
 
@@ -182,4 +191,4 @@ status{0：未读；1：已读}
 | interface |   path    | method | parameter | return  |
 | :-------: | :-------: | :----: | :-------: | :-----: |
 | 图片上传  | /addImage |  POST  | imageData | FileDTO |
-​imageData为前端参数的名称
+imageData为前端参数的名称

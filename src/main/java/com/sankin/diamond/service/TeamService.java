@@ -115,4 +115,17 @@ public class TeamService {
     public int getCreatorById(Integer teamId) {
         return teamMapper.selectById(teamId).getCreator();
     }
+
+    public boolean checkIn(Integer teamId, String userName) {
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("user_name", userName);
+        Users user = usersMapper.selectByMap(columnMap).get(0);
+        String userId = "" + user.getId();
+        Team team = selectById(teamId);
+        String[] members = team.getMembers().split(",");
+        for (String member : members) {
+            if (member.equals(userId)) return true;
+        }
+        return false;
+    }
 }

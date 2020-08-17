@@ -4,12 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sankin.diamond.DTO.DeleteDocDTO;
-import com.sankin.diamond.DTO.SmallDocDTO;
-import com.sankin.diamond.DTO.UserDTO;
+import com.sankin.diamond.DTO.*;
 import com.sankin.diamond.entity.Docs;
+import com.sankin.diamond.entity.Team;
 import com.sankin.diamond.entity.Users;
 import com.sankin.diamond.mapper.DocMapper;
+import com.sankin.diamond.mapper.TeamMapper;
 import com.sankin.diamond.mapper.UsersMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +28,8 @@ public class DocsService {
     @Autowired
     private UsersMapper usersMapper;
 
+    @Autowired
+    private TeamMapper teamMapper;
 
     public int insertOne(Docs docs) {
         docs.setCreateTime(new Timestamp(new Date().getTime()));
@@ -83,7 +85,33 @@ public class DocsService {
         docMapper.updateById(deleteDoc);
     }
 
-    public List<SmallDocDTO> selectByTeamId(Integer id) {
+    public void setNum(SmallDocDTO smallDocDTO, Integer viewed, Integer commented, Integer shared, Integer modified) {
+        smallDocDTO.setViewed(viewed);
+        smallDocDTO.setCommented(commented);
+        smallDocDTO.setShared(shared);
+        smallDocDTO.setModified(modified);
+    }
+
+    public void setAuthority(SmallDocDTO smallDocDTO, Docs doc, Integer userId) {
+        Team team = teamMapper.selectById(doc.getTeamId());
+        String[] members = team.getMembers().split(",");
+        for(int i = 0; i < members.length; ++i) {
+            int NUM = Integer.parseInt(members[i]);
+            if (NUM == userId) setNum(smallDocDTO, 1, 1, 1, 1);
+            return;
+        }
+        int authority = doc.getAuthority();
+        int num[] = new int[4];
+        int count = 0;
+        while (authority != 0) {
+            num[count] = authority&1;
+            count++;
+            authority = authority >> 1;
+        }
+        setNum(smallDocDTO, num[0], num[1], num[2], num[3]);
+    }
+
+    public List<SmallDocDTO> selectByTeamId(Integer id, Integer userId) {
         Map<String, Object> columnMap = new HashMap<>();
         columnMap.put("team_id", id);
         columnMap.put("deleted", 0);
@@ -96,6 +124,7 @@ public class DocsService {
             Users user = usersMapper.selectById(doc.getCreator());
             smallDocDTO.setCreatorName(user.getUserName());
             smallDocDTOS.add(smallDocDTO);
+            setAuthority(smallDocDTO, doc, userId);
         }
         return smallDocDTOS;
     }
@@ -163,5 +192,11 @@ public class DocsService {
             doc.setCreator(teamCreator);
             docMapper.updateById(doc);
         }
+    }
+
+    public void updateAuthority(Integer docId, Integer authority) {
+        Docs doc = docMapper.selectById(docId);
+        doc.setAuthority(authority);
+        docMapper.updateById(doc);
     }
 }

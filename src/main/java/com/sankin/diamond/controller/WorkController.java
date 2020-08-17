@@ -97,15 +97,18 @@ public class WorkController {
     @RequestMapping(value = "/myteam/{userId}", method = RequestMethod.GET)
     public List<TeamCheckDTO> myTeamRecord(@PathVariable("userId") Integer userId,HttpServletRequest request) {
         //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        List<TeamCheckDTO> checkDTOS = new ArrayList<>();
         Users user = usersService.selectById(userId);
-        String regex = ",";
-        List<Integer> ids = new ArrayList<>();
-        String[] temp = user.getTeamIds().split(regex);
-        for (String id:temp) {
-            Integer num = Integer.parseInt(id);
-            ids.add(num);
+        if (!(user.getTeamIds() == null || user.getTeamIds().equals(""))) {
+            String regex = ",";
+            List<Integer> ids = new ArrayList<>();
+            String[] temp = user.getTeamIds().split(regex);
+            for (String id : temp) {
+                Integer num = Integer.parseInt(id);
+                ids.add(num);
+            }
+            checkDTOS = teamService.selectByIds(ids);
         }
-        List<TeamCheckDTO> checkDTOS = teamService.selectByIds(ids);
         return checkDTOS;
     }
 
