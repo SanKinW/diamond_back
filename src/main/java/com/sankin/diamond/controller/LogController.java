@@ -56,7 +56,6 @@ public class LogController {
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Object login(@RequestBody LogDTO logDTO, HttpServletResponse response){
-        System.out.println("begin");
         Users result = usersService.checkLog(logDTO);
         if (result != null) {
             String token = UUID.randomUUID().toString();

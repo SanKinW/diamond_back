@@ -59,31 +59,44 @@ public class DocsController {
             returnDTO.setResultDTO(ResultDTO.errorOf(ErrorType.DOC_DELETED));
             return returnDTO;
         }
-        if (doc.getAuthority() == 0 && (doc.getTeamId() == 0 || doc.getTeamId() == null)) {
-            if (user.getId() == doc.getCreator()) {
-                returnDTO.setShared(0);
-                returnDTO.setCommented(0);
-                returnDTO.setModified(1);
-                returnDTO.setEdited(1);
-                returnDTO.setResultDTO(ResultDTO.okOf());
+        if(user != null) {
+            if (doc.getAuthority() == 0 && (doc.getTeamId() == 0 || doc.getTeamId() == null)) {
+                if (user.getId() == doc.getCreator()) {
+                    returnDTO.setShared(0);
+                    returnDTO.setCommented(0);
+                    returnDTO.setModified(1);
+                    returnDTO.setEdited(1);
+                    returnDTO.setResultDTO(ResultDTO.okOf());
+                }
+                else {
+                    returnDTO.setResultDTO(ResultDTO.errorOf(ErrorType.READ_NOTIFICATION_FAILED));
+                    return returnDTO;
+                }
             }
             else {
-                returnDTO.setResultDTO(ResultDTO.errorOf(ErrorType.READ_NOTIFICATION_FAILED));
+                usersService.setAuthority(returnDTO, doc, user.getId());
             }
-        }
-        else {
-            //usersService.setAuthority(returnDTO, doc, user.getId());
-            usersService.setAuthority(returnDTO, doc, 1);
-        }
-        if (returnDTO.getResultDTO().getType() == 200) BeanUtils.copyProperties(doc, returnDTO);
-        if(user != null) {
             viewService.createOrUpdate(user.getId(),id, title);
             returnDTO.setCollected(favouriteService.findByOne(user, id));
         }
         else {
             viewService.createOrUpdate(0,id, title);
-            returnDTO.setCollected(0);
+            int viewed = doc.getAuthority() & 1;
+            if (viewed == 1) {
+                returnDTO.setCollected(0);
+                returnDTO.setShared(0);
+                returnDTO.setModified(0);
+                returnDTO.setEdited(0);
+                returnDTO.setResultDTO(ResultDTO.okOf());
+            }
+            else {
+                returnDTO.setResultDTO(ResultDTO.errorOf(ErrorType.READ_NOTIFICATION_FAILED));
+                return returnDTO;
+            }
         }
+        BeanUtils.copyProperties(doc, returnDTO);
+        String creatorName = usersService.getNameById(doc.getCreator());
+        returnDTO.setCreatorName(creatorName);
         List<Comments> comments = commentService.selectByDocId(id);
         returnDTO.setComments(comments);
         return returnDTO;

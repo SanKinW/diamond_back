@@ -15,6 +15,7 @@ public class DocReturnDTO {
     private String title;
     private String content;
     private Integer creator;
+    private String creatorName;
     private Timestamp createTime;
     private Timestamp updateTime;
     private Integer teamId;
