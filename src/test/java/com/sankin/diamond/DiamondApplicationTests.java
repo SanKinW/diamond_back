@@ -39,12 +39,13 @@ class DiamondApplicationTests {
 
     @Test
     void testMyCode() {
-        Docs doc = new Docs();
-        doc.setTitle("dog");
-        doc.setCreator(1);
-        doc.setContent("so faith!");
-        doc.setTeamId(0);
-        doc.setAuthority(1);
-        docsService.insertOne(doc);
+        Team team = new Team();
+        team.setTeamName("test3");
+        team.setBasicInformation("create for test3");
+        team.setCreator(2);
+        team.setMembers("2");
+        teamService.insertOne(team);
+        int teamId = teamService.selectByTime(2);
+        usersService.updateTeams(2,teamId);
     }
 }

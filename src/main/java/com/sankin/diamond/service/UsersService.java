@@ -93,7 +93,7 @@ public class UsersService {
     public void updateTeams(Integer userId, Integer teamId) {
         Users user = usersMapper.selectById(userId);
         String teamIds = user.getTeamIds();
-        if (teamId == null || teamId.equals("")) {
+        if (teamIds == null || teamIds.equals("")) {
             teamIds = "" + teamId;
         }
         else {
