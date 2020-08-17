@@ -1,5 +1,5 @@
 # 后端使用说明
-#####本项目是diamond_doc前后端分离的后端项目，为旨在提供接口供前端调用，以完善网站功能。
+##### 本项目是diamond_doc前后端分离的后端项目，为旨在提供接口供前端调用，以完善网站功能。
 ## 配置
 
 ### 数据库建表如下
@@ -30,7 +30,7 @@ create table docs(
     collect_count int default 0,
     authority int not null,
     updated_id int,
-    deleted int default 0，
+    deleted int default 0,
     edited int default 0
 );
 create table views(
@@ -78,13 +78,12 @@ create table notification(
 
 ### 配置信息
 
-![image-20200813133034822](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20200813133034822.png)
+application.properties配置文件中
 
 diamond为数据库名，请在本地Mysql数据库新建该数据库，username以及password根据你们本地mysql配置的账号密码来
 
+运行时启动DiamondApplication
 
-
-启动时运行![image-20200813133453516](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20200813133453516.png)
 
 ## 接口文档
 
@@ -183,7 +182,4 @@ status{0：未读；1：已读}
 | interface |   path    | method | parameter | return  |
 | :-------: | :-------: | :----: | :-------: | :-----: |
 | 图片上传  | /addImage |  POST  | imageData | FileDTO |
-
-![image-20200816112223106](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20200816112223106.png)
-
-​	imageData为前端参数的名称
+​imageData为前端参数的名称
