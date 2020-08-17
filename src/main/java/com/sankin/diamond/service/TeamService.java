@@ -62,6 +62,20 @@ public class TeamService {
         Map<String, Object> columnMap = new HashMap<>();
         columnMap.put("user_name", userName);
         Users user = usersMapper.selectByMap(columnMap).get(0);
+        Team team = teamMapper.selectById(teamId);
+        String memberId = "" + user.getId();
+        String[] memberIds = team.getMembers().split(",");
+        String newIds = "";
+        int count = 0;
+        for(int i = 0; i < memberIds.length; ++i) {
+            if (!memberIds[i].equals(memberId)) {
+                if (count == 0) newIds = newIds + memberIds[i];
+                else newIds = newIds + "," + memberIds[i];
+                count++;
+            }
+        }
+        team.setMembers(newIds);
+        teamMapper.updateById(team);
     }
 
     public List<TeamReturnDTO> selectByTeamName(String teamName) {

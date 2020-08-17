@@ -109,10 +109,13 @@ public class UsersService {
         Users user = usersMapper.selectByMap(columnMap).get(0);
         String[] teamIds = user.getTeamIds().split(",");
         String newIds = "";
+        String id = "" + teamId;
+        int count = 0;
         for(int i = 0; i < teamIds.length; ++i) {
-            if (!teamIds[i].equals(teamId)) {
-                if (i == 0) newIds = newIds + teamIds[i];
+            if (!teamIds[i].equals(id)) {
+                if (count == 0) newIds = newIds + teamIds[i];
                 else newIds = newIds + "," + teamIds[i];
+                count++;
             }
         }
         user.setTeamIds(newIds);
