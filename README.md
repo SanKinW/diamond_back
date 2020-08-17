@@ -62,7 +62,8 @@ create table comments(
     commentator int not null,
     commentator_name varchar(50),
     comment_time datetime,
-    like_count int default 0
+    like_count int default 0,
+    avatar_url varchar(255)
 );
 create table notification(
 	id int primary key not null auto_increment,

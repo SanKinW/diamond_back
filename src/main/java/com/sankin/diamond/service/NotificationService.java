@@ -1,6 +1,7 @@
 package com.sankin.diamond.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sankin.diamond.DTO.CommentDTO;
 import com.sankin.diamond.entity.Docs;
 import com.sankin.diamond.entity.Notification;
@@ -116,5 +117,13 @@ public class NotificationService {
         Team team = teamMapper.selectById(teamId);
         if (type == 9) insertOne(user.getId(), team.getCreator(), type, teamId, team.getTeamName());
         else insertOne(team.getCreator(), user.getId(),type, teamId, team.getTeamName());
+    }
+
+    public Page<Notification> selectByReceiverAndPage(Integer page, Integer userId) {
+        QueryWrapper<Notification> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("receiver", userId).orderByDesc("create_time");
+        Page<Notification> notifications = new Page<>(page, 10);
+        Page<Notification> notificationPage = notificationMapper.selectPage(notifications, queryWrapper);
+        return notificationPage;
     }
 }

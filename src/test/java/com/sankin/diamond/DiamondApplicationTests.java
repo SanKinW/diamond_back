@@ -33,19 +33,11 @@ class DiamondApplicationTests {
 
     @Test
     void contextLoads() {
-        List<SmallDocDTO> smallDocDTOS = docsService.selectByTeamId(1);
-        System.out.println(smallDocDTOS);
+
     }
 
     @Test
     void testMyCode() {
-        Team team = new Team();
-        team.setTeamName("test3");
-        team.setBasicInformation("create for test3");
-        team.setCreator(2);
-        team.setMembers("2");
-        teamService.insertOne(team);
-        int teamId = teamService.selectByTime(2);
-        usersService.updateTeams(2,teamId);
+
     }
 }

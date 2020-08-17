@@ -1,10 +1,7 @@
 package com.sankin.diamond.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sankin.diamond.DTO.DeleteDocDTO;
-import com.sankin.diamond.DTO.NotificationDTO;
-import com.sankin.diamond.DTO.ResultDTO;
-import com.sankin.diamond.DTO.TeamCheckDTO;
+import com.sankin.diamond.DTO.*;
 import com.sankin.diamond.entity.*;
 import com.sankin.diamond.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,10 +162,18 @@ public class WorkController {
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/notification/{userId}", method = RequestMethod.GET)
-    public List<NotificationDTO> notificationCenter(@PathVariable("userId") Integer userId) {
-        List<Notification> notifications = notificationService.selectByReceiver(userId);
-        List<NotificationDTO> notificationDTOS = usersService.addName(notifications);
-        return notificationDTOS;
+    @RequestMapping(value = "/notification/{page}/{userId}", method = RequestMethod.GET)
+    public NotificationReturnDTO notificationCenter(@PathVariable("page") Integer page,
+                                                    @PathVariable("userId") Integer userId) {
+        Page<Notification> notificationPage = notificationService.selectByReceiverAndPage(page, userId);
+        List<NotificationDTO> notificationDTOS = usersService.addName(notificationPage.getRecords());
+        NotificationReturnDTO notificationReturnDTO = new NotificationReturnDTO();
+        notificationReturnDTO.setNotificationDTOS(notificationDTOS);
+        notificationReturnDTO.setCurrentPage(notificationPage.getCurrent());
+        notificationReturnDTO.setHasNext(notificationPage.hasNext());
+        notificationReturnDTO.setHasPrevious(notificationPage.hasPrevious());
+        notificationReturnDTO.setTotalNotifications(notificationPage.getTotal());
+        notificationReturnDTO.setTotalPages(notificationPage.getPages());
+        return notificationReturnDTO;
     }
 }
