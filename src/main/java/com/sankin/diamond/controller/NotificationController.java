@@ -26,7 +26,7 @@ public class NotificationController {
     public Object inviteUser(@PathVariable("teamId") Integer teamId,
                              @PathVariable("userName") String userName) {
         boolean check = teamService.checkIn(teamId, userName);
-        if (check) {
+        if (!check) {
             notificationService.TeamInvite(teamId, userName);
             return ResultDTO.okOf();
         }
@@ -60,7 +60,7 @@ public class NotificationController {
     public Object joinTeamByOwn(@PathVariable("teamId") Integer teamId,
                                 @PathVariable("userName") String userName) {
         boolean check = teamService.checkIn(teamId, userName);
-        if (check) {
+        if (!check) {
             notificationService.joinTeam(teamId, userName);
             return ResultDTO.okOf();
         }

@@ -93,12 +93,16 @@ public class DocsService {
     }
 
     public void setAuthority(SmallDocDTO smallDocDTO, Docs doc, Integer userId) {
+        System.out.println("userId="+userId);
         Team team = teamMapper.selectById(doc.getTeamId());
         String[] members = team.getMembers().split(",");
         for(int i = 0; i < members.length; ++i) {
             int NUM = Integer.parseInt(members[i]);
-            if (NUM == userId) setNum(smallDocDTO, 1, 1, 1, 1);
-            return;
+            System.out.println("teamMemberId=" + NUM);
+            if (NUM == userId) {
+                setNum(smallDocDTO, 1, 1, 1, 1);
+                return;
+            }
         }
         int authority = doc.getAuthority();
         int num[] = new int[4];
@@ -123,8 +127,8 @@ public class DocsService {
             smallDocDTO.setTitle(doc.getTitle());
             Users user = usersMapper.selectById(doc.getCreator());
             smallDocDTO.setCreatorName(user.getUserName());
-            smallDocDTOS.add(smallDocDTO);
             setAuthority(smallDocDTO, doc, userId);
+            smallDocDTOS.add(smallDocDTO);
         }
         return smallDocDTOS;
     }

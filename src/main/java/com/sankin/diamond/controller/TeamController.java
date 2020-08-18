@@ -75,7 +75,7 @@ public class TeamController {
 
     /**
      * 查看团队信息
-     * @param docId
+     * @param teamId
      * @param userId
      * @param request
      * @return
