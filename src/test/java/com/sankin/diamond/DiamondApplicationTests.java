@@ -41,6 +41,10 @@ class DiamondApplicationTests {
 
     @Test
     void testMyCode() {
-
+        Users user = new Users();
+        user.setSex("女");
+        user.setId(1);
+        user.setUserName("SanKinW");
+        usersService.modifyInformation(user);
     }
 }

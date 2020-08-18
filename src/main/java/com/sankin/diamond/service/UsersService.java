@@ -49,10 +49,12 @@ public class UsersService {
     }
 
     public int modifyInformation(Users users) {
-        Map<String, Object> columnMap = new HashMap<>();
-        columnMap.put("user_name", users.getUserName());
-        List<Users> usersList = usersMapper.selectByMap(columnMap);
-        if (usersList != null && usersList.size() != 0) return 0;
+        QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_name", users.getUserName()).ne("id", users.getId());
+        List<Users> usersList = usersMapper.selectList(queryWrapper);
+        if (usersList != null && usersList.size() != 0) {
+            return 0;
+        }
         usersMapper.updateById(users);
         return 1;
     }

@@ -103,7 +103,7 @@ path中都省略了localhost:8080
 
 | interface |     path     | method |   parameter    |  return   |
 | :-------: | :----------: | :----: | :------------: | :-------: |
-| 更改信息  | /information |  POST  | InformationDTO | ResultDTO |
+| 更改信息  | /information/{userId} |  POST  | InformationDTO | ResultDTO |
 | 查看信息  | /information/{userName} |  get   |                |  USers  |
 
 可以尝试在session里面直接获取user
