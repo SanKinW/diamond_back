@@ -27,7 +27,7 @@ public class CORSFilter implements Filter {
         resp.setHeader("Access-Control-Allow-Credentials", "true");//true代表允许携带cookie
         //下面这两个也很关键
         resp.setHeader("Access-Control-Allow-Methods", "*");
-        resp.setHeader("Access-Control-Allow-Headers", "Content-Type,Access-Token");
+        resp.setHeader("Access-Control-Allow-Headers", "*");
 //        resp.setHeader("Access-Control-Expose-Headers", "*");
         chain.doFilter(request,response);
     }

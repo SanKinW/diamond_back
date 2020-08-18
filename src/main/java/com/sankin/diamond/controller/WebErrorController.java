@@ -21,13 +21,13 @@ public class WebErrorController implements ErrorController {
 
     @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
     public String errorHtml(HttpServletRequest request, Model model) {
-        /*HttpStatus status = getStatus(request);
+        HttpStatus status = getStatus(request);
         if (status.is4xxClientError()) {
             model.addAttribute("message","您的请求出错了，要不换个姿势吧");
         }
         if (status.is5xxServerError()) {
             model.addAttribute("message","服务器冒烟了，请稍后再试！");
-        }*/
+        }
         return "404 Not Found";
     }
 
