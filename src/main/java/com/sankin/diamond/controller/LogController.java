@@ -2,16 +2,22 @@ package com.sankin.diamond.controller;
 
 import com.sankin.diamond.DTO.LogDTO;
 import com.sankin.diamond.DTO.ResultDTO;
+import com.sankin.diamond.DTO.SmallTeamDTO;
+import com.sankin.diamond.DTO.UserDTO;
 import com.sankin.diamond.entity.Users;
 import com.sankin.diamond.exception.ErrorException;
 import com.sankin.diamond.exception.ErrorType;
+import com.sankin.diamond.service.NotificationService;
+import com.sankin.diamond.service.TeamService;
 import com.sankin.diamond.service.UsersService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -22,6 +28,12 @@ import java.util.UUID;
 public class LogController {
     @Autowired
     private UsersService usersService;
+
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     /**
      * 注册功能
@@ -35,12 +47,6 @@ public class LogController {
     public Object register(@RequestBody LogDTO logDTO, HttpServletResponse response) {
         int result = usersService.insertOne(logDTO);
         if (result > 0) {
-            Users users = new Users();
-            users.setId(result);
-            String token = UUID.randomUUID().toString();
-            users.setToken(token);
-            usersService.updateByOne(users);
-            response.addCookie(new Cookie("token",token));
             return ResultDTO.okOf();
         }
         else return ResultDTO.errorOf(ErrorType.NAME_REPEAT);
@@ -62,7 +68,15 @@ public class LogController {
             result.setToken(token);
             usersService.updateByOne(result);
             response.addCookie(new Cookie("token",token));
-            return ResultDTO.okOf();
+            ResultDTO resultDTO =  ResultDTO.okOf();
+            UserDTO userDTO = new UserDTO();
+            BeanUtils.copyProperties(result,userDTO);
+            List<SmallTeamDTO> teamDTOS = teamService.setBasicByIds(result.getTeamIds());
+            usersService.setNameByIds(teamDTOS);
+            userDTO.setTeams(teamDTOS);
+            userDTO.setUnRead(notificationService.unRead(result.getId()));
+            resultDTO.setData(userDTO);
+            return resultDTO;
         }
         else return ResultDTO.errorOf(ErrorType.INFORMATION_ERROR);
     }

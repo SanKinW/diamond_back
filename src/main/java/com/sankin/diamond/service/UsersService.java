@@ -40,7 +40,7 @@ public class UsersService {
         Map<String, Object> columnMap = new HashMap<>();
         columnMap.put("user_name", logDTO.getUserName());
         List<Users> usersList = usersMapper.selectByMap(columnMap);
-        if (usersList.size() != 0) return 0;
+        if (usersList != null && usersList.size() != 0) return 0;
         Users users = new Users();
         users.setUserName(logDTO.getUserName());
         users.setPassword(logDTO.getPassword());

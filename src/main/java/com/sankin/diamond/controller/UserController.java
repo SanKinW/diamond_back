@@ -52,7 +52,9 @@ public class UserController {
             UserDTO userDTO = new UserDTO();
             BeanUtils.copyProperties(users, userDTO);
             userDTO.setTeams(user.getTeams());
-            return ResultDTO.okOf();
+            ResultDTO resultDTO =  ResultDTO.okOf();
+            resultDTO.setData(userDTO);
+            return resultDTO;
         }
         else return ResultDTO.errorOf(ErrorType.NAME_REPEAT);
     }
