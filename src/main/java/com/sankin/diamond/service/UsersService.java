@@ -184,6 +184,7 @@ public class UsersService {
     }
 
     public void setNameByIds(List<SmallTeamDTO> teamDTOS) {
+        if (teamDTOS == null || teamDTOS.size() == 0) return;
         for (SmallTeamDTO teamDTO : teamDTOS) {
             Users user = usersMapper.selectById(teamDTO.getCreator());
             teamDTO.setCreatorName(user.getUserName());
