@@ -58,7 +58,7 @@ public class DocsService {
 
     public Page<Docs> selectByPage(Integer userId, Integer page) {
         QueryWrapper<Docs> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("creator", userId).eq("deleted",0);
+        queryWrapper.eq("creator", userId).eq("deleted",0).orderByDesc("create_time");
         Page<Docs> docs = new Page<>(page, 6);
         Page<Docs> docsPage = docMapper.selectPage(docs, queryWrapper);
         return docsPage;
@@ -135,6 +135,7 @@ public class DocsService {
 
     public void incComment(Integer docId) {
         Docs doc = docMapper.selectById(docId);
+        System.out.println(doc);
         int count = doc.getCommentCount() + 1;
         doc.setCommentCount(count);
         docMapper.updateById(doc);

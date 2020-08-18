@@ -130,7 +130,7 @@ public class DocsController {
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/doc/{docId}",method = RequestMethod.GET)
+    @RequestMapping(value = "/docStatus/{docId}",method = RequestMethod.GET)
     public Object changeDocEdited(@PathVariable("docId") Integer docId) {
         //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
         int result = docsService.updateEdited(docId);

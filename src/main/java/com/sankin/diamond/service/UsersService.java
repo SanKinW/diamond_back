@@ -49,8 +49,12 @@ public class UsersService {
     }
 
     public int modifyInformation(Users users) {
-        int result = usersMapper.updateById(users);
-        return result;
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("user_name", users.getUserName());
+        List<Users> usersList = usersMapper.selectByMap(columnMap);
+        if (usersList != null && usersList.size() != 0) return 0;
+        usersMapper.updateById(users);
+        return 1;
     }
 
     public List<SmallUserDTO> selectByIds(String[] members) {
