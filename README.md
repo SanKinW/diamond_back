@@ -100,10 +100,10 @@ path中都省略了localhost:8080
 
 #### 用户信息修改
 
-| interface |     path     | method |   parameter    |           return            |
-| :-------: | :----------: | :----: | :------------: | :-------------------------: |
-| 更改信息  | /information |  POST  | InformationDTO | {正常:user；异常:ResultDTO} |
-| 查看信息  | /information |  get   |                |           USerDTO           |
+| interface |     path     | method |   parameter    |  return   |
+| :-------: | :----------: | :----: | :------------: | :-------: |
+| 更改信息  | /information |  POST  | InformationDTO | ResultDTO |
+| 查看信息  | /information |  get   |                |  USerDTO  |
 
 可以尝试在session里面直接获取user
 
@@ -157,16 +157,16 @@ status{0：未读；1：已读}
 
 #### 团队功能
 
-|  interface   |            path             | method  |   parameter   |                          return                          |
-| :----------: | :-------------------------: | :-----: | :-----------: | :------------------------------------------------------: |
-|   创建团队   |       /team/{userId}        |  POST   | TeamCreateDTO | ResultDTO{type=200:正常,else:异常},message中含有异常信息 |
-|   解散团队   |      /deleteTeam/{id}       | DELETED |               |                        ResultDTO                         |
-|   查看信息   |         /team/{id}          |   GET   |               |                      TeamReturnDTO                       |
-|   加入团队   |   /join/{teamId}/{userId}   |   GET   |               |                        ResultDTO                         |
-|   退出团队   |  /quit/{teamId}/{userName}  |   GET   |               |                        ResultDTO                         |
-|   设置权限   | /authority/{docId}/{weight} |   GET   |               |                        ResultDTO                         |
-|   搜索团队   |     /search/{teamName}      |   GET   |               |                  List< TeamReturnDTO >                   |
-| 修改文档权限 |  /modifyAuthority/{docId}   |  POST   |    Integer    |                        ResultDTO                         |
+|  interface   |                 path                 | method  |   parameter   |                          return                          |
+| :----------: | :----------------------------------: | :-----: | :-----------: | :------------------------------------------------------: |
+|   创建团队   |            /team/{userId}            |  POST   | TeamCreateDTO | ResultDTO{type=200:正常,else:异常},message中含有异常信息 |
+|   解散团队   |           /deleteTeam/{id}           | DELETED |               |                        ResultDTO                         |
+|   查看信息   |       /team/{teamId}/{userId}        |   GET   |               |                      TeamReturnDTO                       |
+|   加入团队   |       /join/{teamId}/{userId}        |   GET   |               |                        ResultDTO                         |
+|   退出团队   |      /quit/{teamId}/{userName}       |   GET   |               |                        ResultDTO                         |
+|   设置权限   |     /authority/{docId}/{weight}      |   GET   |               |                        ResultDTO                         |
+|   搜索团队   |          /search/{teamName}          |   GET   |               |                  List< TeamReturnDTO >                   |
+| 修改文档权限 | /modifyAuthority/{docId}/{authority} |   GET   |               |                        ResultDTO                         |
 
 加入分为主动加入和邀请加入，若管理员或者被邀请者同意，则调用该接口将该用户写入成员列
 

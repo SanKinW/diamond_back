@@ -43,7 +43,7 @@ public class LogController {
             response.addCookie(new Cookie("token",token));
             return ResultDTO.okOf();
         }
-        else return ResultDTO.errorOf(new ErrorException(ErrorType.NAME_REPEAT));
+        else return ResultDTO.errorOf(ErrorType.NAME_REPEAT);
     }
 
     /**

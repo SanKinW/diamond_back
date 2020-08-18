@@ -54,7 +54,7 @@ public class TeamController {
             usersService.updateTeams(userId,teamId);
             return ResultDTO.okOf();
         }
-        else return ResultDTO.errorOf(new ErrorException(ErrorType.TEAM_CREATE_FAILED));
+        else return ResultDTO.errorOf(ErrorType.TEAM_CREATE_FAILED);
     }
 
     /**
@@ -75,24 +75,28 @@ public class TeamController {
 
     /**
      * 查看团队信息
-     * @param id
+     * @param docId
+     * @param userId
+     * @param request
      * @return
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/team/{id}", method = RequestMethod.GET)
-    public TeamReturnDTO teamInformation(@PathVariable("id")Integer id, HttpServletRequest request) {
-        Team team = teamService.selectById(id);
+    @RequestMapping(value = "/team/{teamId}/{userId}", method = RequestMethod.GET)
+    public TeamReturnDTO teamInformation(@PathVariable("teamId")Integer teamId,
+                                         @PathVariable("userId") Integer userId,
+                                         HttpServletRequest request) {
+        Team team = teamService.selectById(teamId);
         TeamReturnDTO returnDTO = new TeamReturnDTO();
         BeanUtils.copyProperties(team, returnDTO);
         String[] members = team.getMembers().split(",");
         List<String> memberName = usersService.selectByIds(members);
         returnDTO.setMembersName(memberName);
         returnDTO.setCreatorName(usersService.getNameById(team.getCreator()));
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
         List<SmallDocDTO> docDTOs = new ArrayList<>();
-        if (user != null) docDTOs = docsService.selectByTeamId(id, user.getId());
-        else docDTOs = docsService.selectByTeamId(id, 1);
+        //if (user != null) docDTOs = docsService.selectByTeamId(docId, user.getId());
+        docDTOs = docsService.selectByTeamId(teamId, userId);
         returnDTO.setDocs(docDTOs);
         return returnDTO;
     }
@@ -105,8 +109,8 @@ public class TeamController {
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/modifyAuthority/{docId}", method = RequestMethod.POST)
-    public Object modifyAuthority(@RequestBody Integer authority,
+    @RequestMapping(value = "/modifyAuthority/{docId}/{authority}", method = RequestMethod.GET)
+    public Object modifyAuthority(@PathVariable("authority") Integer authority,
                                   @PathVariable("docId") Integer docId) {
         docsService.updateAuthority(docId, authority);
         return ResultDTO.okOf();
@@ -135,7 +139,7 @@ public class TeamController {
             usersService.updateTeams(userId, teamId);
             return ResultDTO.okOf();
         }
-        else return ResultDTO.errorOf(new ErrorException(ErrorType.TEAM_JOIN_FAILED));
+        else return ResultDTO.errorOf(ErrorType.TEAM_JOIN_FAILED);
     }
 
     /**

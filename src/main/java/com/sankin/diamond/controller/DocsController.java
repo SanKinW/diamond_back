@@ -120,7 +120,7 @@ public class DocsController {
         docs.setCreator(userId);
         int result = docsService.insertOne(docs);
         if (result > 0) return ResultDTO.okOf();
-        else return ResultDTO.errorOf(new ErrorException(ErrorType.PUBLISH_ERROR));
+        else return ResultDTO.errorOf(ErrorType.PUBLISH_ERROR);
     }
 
     /**
@@ -160,7 +160,7 @@ public class DocsController {
         docs.setEdited(0);
         int result = docsService.updateOne(docs);
         if (result > 0) return ResultDTO.okOf();
-        else return ResultDTO.errorOf(new ErrorException(ErrorType.UPDATE_FAILED));
+        else return ResultDTO.errorOf(ErrorType.UPDATE_FAILED);
     }
 
     /**
