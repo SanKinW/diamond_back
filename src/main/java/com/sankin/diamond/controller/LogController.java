@@ -64,7 +64,7 @@ public class LogController {
             response.addCookie(new Cookie("token",token));
             return ResultDTO.okOf();
         }
-        else return ResultDTO.errorOf(new ErrorException(ErrorType.INFORMATION_ERROR));
+        else return ResultDTO.errorOf(ErrorType.INFORMATION_ERROR);
     }
 
     /**

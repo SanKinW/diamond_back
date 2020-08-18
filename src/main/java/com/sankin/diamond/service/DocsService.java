@@ -176,7 +176,7 @@ public class DocsService {
         Map<String, Object> columnMap = new HashMap<>();
         columnMap.put("creator", userId);
         columnMap.put("deleted", 1);
-        usersMapper.deleteByMap(columnMap);
+        docMapper.deleteByMap(columnMap);
     }
 
     public void deleteComplete(Integer docId) {
