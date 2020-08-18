@@ -94,6 +94,7 @@ public class TeamService {
     public List<SmallTeamDTO> setBasicByIds(String teamIds) {
         List<SmallTeamDTO> teamDTOS = new ArrayList<>();
         String regex = ",";
+        if (teamIds == null || teamIds.equals("")) return null;
         String[] temp = teamIds.split(regex);
         for (String id:temp) {
             Integer teamId = Integer.parseInt(id);

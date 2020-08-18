@@ -12,7 +12,7 @@ public class TeamReturnDTO {
     private String basicInformation;
     private Integer creator;
     private String creatorName;
-    private List<String> membersName;
+    private List<SmallUserDTO> membersName;
     private Timestamp createTime;
     private List<SmallDocDTO> docs;
 }

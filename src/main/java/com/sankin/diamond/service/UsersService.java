@@ -9,7 +9,6 @@ import com.sankin.diamond.entity.Users;
 import com.sankin.diamond.exception.ErrorType;
 import com.sankin.diamond.mapper.TeamMapper;
 import com.sankin.diamond.mapper.UsersMapper;
-import org.apache.catalina.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,18 +53,20 @@ public class UsersService {
         return result;
     }
 
-    public List<String> selectByIds(String[] members) {
+    public List<SmallUserDTO> selectByIds(String[] members) {
         List<Integer> ids = new ArrayList<>();
         for (String member : members) {
             Integer id = Integer.parseInt(member);
             ids.add(id);
         }
         List<Users> users = usersMapper.selectBatchIds(ids);
-        List<String> userNames = new ArrayList<>();
+        List<SmallUserDTO> smallUserDTOS = new ArrayList<>();
         for (Users user: users) {
-            userNames.add(user.getUserName());
+            SmallUserDTO smallUserDTO = new SmallUserDTO();
+            BeanUtils.copyProperties(user, smallUserDTO);
+            smallUserDTOS.add(smallUserDTO);
         }
-        return userNames;
+        return smallUserDTOS;
     }
 
     public void dismiss(Integer id) {

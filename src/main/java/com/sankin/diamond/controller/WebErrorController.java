@@ -18,7 +18,8 @@ public class WebErrorController implements ErrorController {
         return null;
     }
 
-    /*@RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
+    /*
+    @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView errorHtml(HttpServletRequest request, Model model) {
         HttpStatus status = getStatus(request);
 
@@ -41,5 +42,6 @@ public class WebErrorController implements ErrorController {
         } catch (Exception ex) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
-    }*/
+    }
+    */
 }

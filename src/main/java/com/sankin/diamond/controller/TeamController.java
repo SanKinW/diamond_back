@@ -90,7 +90,7 @@ public class TeamController {
         TeamReturnDTO returnDTO = new TeamReturnDTO();
         BeanUtils.copyProperties(team, returnDTO);
         String[] members = team.getMembers().split(",");
-        List<String> memberName = usersService.selectByIds(members);
+        List<SmallUserDTO> memberName = usersService.selectByIds(members);
         returnDTO.setMembersName(memberName);
         returnDTO.setCreatorName(usersService.getNameById(team.getCreator()));
         //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
