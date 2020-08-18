@@ -73,7 +73,8 @@ create table notification(
     create_time datetime,
     status int,
     outer_id int,
-    outer_title varchar(50)
+    outer_title varchar(50),
+    completed int
 );
 ```
 
@@ -103,7 +104,7 @@ path中都省略了localhost:8080
 | interface |     path     | method |   parameter    |  return   |
 | :-------: | :----------: | :----: | :------------: | :-------: |
 | 更改信息  | /information |  POST  | InformationDTO | ResultDTO |
-| 查看信息  | /information |  get   |                |  USerDTO  |
+| 查看信息  | /information/{userName} |  get   |                |  USers  |
 
 可以尝试在session里面直接获取user
 
@@ -183,9 +184,10 @@ status{0：未读；1：已读}
 
 #### 评论功能
 
-| interface |       path        | method | parameter  |  return   |
-| :-------: | :---------------: | :----: | :--------: | :-------: |
-| 评论文档  | /comment/{userId} |  POST  | CommentDTO | ResultDTO |
+| interface |           path           | method | parameter  |  return   |
+| :-------: | :----------------------: | :----: | :--------: | :-------: |
+| 评论文档  |    /comment/{userId}     |  POST  | CommentDTO | ResultDTO |
+| 点赞评论  | /commentLike/{commentId} |  GET   |            | ResultDTO |
 
 #### 图片上传
 

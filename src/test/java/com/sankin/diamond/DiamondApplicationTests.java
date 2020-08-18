@@ -31,9 +31,12 @@ class DiamondApplicationTests {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Test
     void contextLoads() {
-
+        notificationService.refuse(1, "Moon", 10);
     }
 
     @Test

@@ -9,6 +9,7 @@ import com.sankin.diamond.entity.Users;
 import com.sankin.diamond.exception.ErrorType;
 import com.sankin.diamond.mapper.TeamMapper;
 import com.sankin.diamond.mapper.UsersMapper;
+import org.apache.catalina.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -194,4 +195,11 @@ public class UsersService {
         columnMap.put("user_name", userName);
         return usersMapper.selectByMap(columnMap).get(0).getId();
     }
+
+    public Users selectByName(String userName) {
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("user_name", userName);
+        return usersMapper.selectByMap(columnMap).get(0);
+    }
+
 }

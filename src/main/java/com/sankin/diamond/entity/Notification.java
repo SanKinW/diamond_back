@@ -19,4 +19,5 @@ public class Notification {
     private Integer status;
     private Integer outerId;
     private String outerTitle;
+    private Integer completed;
 }

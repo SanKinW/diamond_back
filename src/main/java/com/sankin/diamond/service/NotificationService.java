@@ -43,6 +43,7 @@ public class NotificationService {
         notification.setCreateTime(new Timestamp(new Date().getTime()));
         notification.setOuterId(outerId);
         notification.setOuterTitle(outerTitle);
+        notification.setCompleted(0);
         notificationMapper.insert(notification);
     }
 
@@ -106,8 +107,29 @@ public class NotificationService {
 
     public void joinReturn(Integer userId, Integer teamId, Integer type) {
         Team team = teamMapper.selectById(teamId);
-        if (type == 7) insertOne(userId, team.getCreator(), type, teamId, team.getTeamName());
-        else insertOne(team.getCreator(), userId, type, teamId, team.getTeamName());
+        Map<String, Object> columnMap = new HashMap<>();
+        if (type == 7) {
+            columnMap.put("notifier", team.getCreator());
+            columnMap.put("receiver", userId);
+            columnMap.put("type", type);
+            List<Notification> notifications = notificationMapper.selectByMap(columnMap);
+            for (Notification notification : notifications) {
+                notification.setCompleted(1);
+                notificationMapper.updateById(notification);
+            }
+            insertOne(userId, team.getCreator(), type, teamId, team.getTeamName());
+        }
+        else {
+            columnMap.put("notifier", userId);
+            columnMap.put("receiver", team.getCreator());
+            columnMap.put("type", type);
+            List<Notification> notifications = notificationMapper.selectByMap(columnMap);
+            for (Notification notification : notifications) {
+                notification.setCompleted(1);
+                notificationMapper.updateById(notification);
+            }
+            insertOne(team.getCreator(), userId, type, teamId, team.getTeamName());
+        }
     }
 
     public void refuse(Integer teamId, String userName, Integer type) {
@@ -115,8 +137,29 @@ public class NotificationService {
         columnMap.put("user_name", userName);
         Users user = usersMapper.selectByMap(columnMap).get(0);
         Team team = teamMapper.selectById(teamId);
-        if (type == 9) insertOne(user.getId(), team.getCreator(), type, teamId, team.getTeamName());
-        else insertOne(team.getCreator(), user.getId(),type, teamId, team.getTeamName());
+        Map<String, Object> column = new HashMap<>();
+        if (type == 9) {
+            column.put("notifier", team.getCreator());
+            column.put("receiver", user.getId());
+            column.put("type", type);
+            List<Notification> notifications = notificationMapper.selectByMap(column);
+            for (Notification notification : notifications) {
+                notification.setCompleted(2);
+                notificationMapper.updateById(notification);
+            }
+            insertOne(user.getId(), team.getCreator(), type, teamId, team.getTeamName());
+        }
+        else {
+            column.put("notifier", user.getId());
+            column.put("receiver", team.getCreator());
+            column.put("type", type);
+            List<Notification> notifications = notificationMapper.selectByMap(column);
+            for (Notification notification : notifications) {
+                notification.setCompleted(2);
+                notificationMapper.updateById(notification);
+            }
+            insertOne(team.getCreator(), user.getId(),type, teamId, team.getTeamName());
+        }
     }
 
     public Page<Notification> selectByReceiverAndPage(Integer page, Integer userId) {

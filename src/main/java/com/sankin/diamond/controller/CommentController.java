@@ -48,5 +48,11 @@ public class CommentController {
         return ResultDTO.okOf();
     }
 
-
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping(value = "/commentLike/{commentId}", method = RequestMethod.GET)
+    public Object incLike(@PathVariable("commentId") Integer commentId) {
+        commentService.incLike(commentId);
+        return ResultDTO.okOf();
+    }
 }

@@ -4,7 +4,6 @@ import com.sankin.diamond.DTO.InformationDTO;
 import com.sankin.diamond.DTO.ResultDTO;
 import com.sankin.diamond.DTO.UserDTO;
 import com.sankin.diamond.entity.Users;
-import com.sankin.diamond.exception.ErrorException;
 import com.sankin.diamond.exception.ErrorType;
 import com.sankin.diamond.service.UsersService;
 import org.springframework.beans.BeanUtils;
@@ -23,14 +22,14 @@ public class UserController {
 
     /**
      * 查看个人信息
-     * @param request
+     * @param userName
      * @return
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/information", method = RequestMethod.GET)
-    public Object getInformation(HttpServletRequest request) {
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+    @RequestMapping(value = "/information/{userName}", method = RequestMethod.GET)
+    public Object getInformation(@PathVariable("userName") String userName) {
+        Users user = usersService.selectByName(userName);
         return user;
     }
 

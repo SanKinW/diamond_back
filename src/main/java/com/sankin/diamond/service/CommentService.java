@@ -34,4 +34,11 @@ public class CommentService {
         queryWrapper.eq("doc_id",id);
         return commentsMapper.selectList(queryWrapper);
     }
+
+    public void incLike(Integer commentId) {
+        Comments comment = commentsMapper.selectById(commentId);
+        Integer likeCount = comment.getLikeCount() + 1;
+        comment.setLikeCount(likeCount);
+        commentsMapper.updateById(comment);
+    }
 }
