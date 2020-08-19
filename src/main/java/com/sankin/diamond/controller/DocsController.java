@@ -90,6 +90,7 @@ public class DocsController {
             int viewed = doc.getAuthority() & 1;
             if (viewed == 1) {
                 returnDTO.setCollected(0);
+                returnDTO.setCommented(0);
                 returnDTO.setShared(0);
                 returnDTO.setModified(0);
                 returnDTO.setEdited(0);

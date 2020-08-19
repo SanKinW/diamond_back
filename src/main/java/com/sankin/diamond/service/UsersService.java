@@ -44,6 +44,7 @@ public class UsersService {
         Users users = new Users();
         users.setUserName(logDTO.getUserName());
         users.setPassword(logDTO.getPassword());
+        users.setAvatarUrl("../assets/touxiang.jpeg");
         int result = usersMapper.insert(users);
         return result;
     }
