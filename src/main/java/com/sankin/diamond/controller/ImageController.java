@@ -24,7 +24,9 @@ public class ImageController {
                 fileDTO.setUrl(url);
                 return fileDTO;
             }catch (Exception e) {
-                e.printStackTrace();
+                FileDTO fileDTO = new FileDTO();
+                fileDTO.setSuccess(0);
+                return fileDTO;
             }
         }
         FileDTO fileDTO = new FileDTO();
