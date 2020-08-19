@@ -63,6 +63,7 @@ public class WorkController {
                                             @PathVariable("userId") Integer userId,
                                             HttpServletRequest request) {
         //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        System.out.println(userId);
         Page<Favourites> favourites = favouriteService.selectByPage(userId, page);
         return favourites;
     }

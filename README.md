@@ -106,20 +106,18 @@ path中都省略了localhost:8080
 | 更改信息  | /information/{userId} |  POST  | InformationDTO | ResultDTO |
 | 查看信息  | /information/{userName} |  get   |                |  USers  |
 
-可以尝试在session里面直接获取user
-
 #### 工作台
 
-| interface |           path           | method | parameter |         return          |
-| :-------: | :----------------------: | :----: | :-------: | :---------------------: |
-| 最近浏览  |     /views/{userId}      |  GET   |           |      List< Views >      |
-| 收藏文档  | /collect/{page}/{userId} |  GET   |           |   Page< Favourites >    |
-| 自己创建  |  /mydoc/{page}/{userId}  |  GET   |           |      Page< Docs >       |
-| 加入团队  |     /myteam/{userId}     |  GET   |           |  List< TeamCheckDTO >   |
-|  回收站   |    /recycle/{userId}     |  GET   |           |  List< DeleteDocDTO >   |
-| 消息中心  |  /notification/{userId}  |  GET   |           | List< NotificationDTO > |
-| 一键清空  |   /deletedAll/{userId}   |  GET   |           |        ResultDTO        |
-| 逐个删除  |   /deletedOne/{docId}    |  GET   |           |        ResultDTO        |
+| interface |             path              | method | parameter |         return          |
+| :-------: | :---------------------------: | :----: | :-------: | :---------------------: |
+| 最近浏览  |        /views/{userId}        |  GET   |           |      List< Views >      |
+| 收藏文档  |   /collect/{page}/{userId}    |  GET   |           |   Page< Favourites >    |
+| 自己创建  |    /mydoc/{page}/{userId}     |  GET   |           |      Page< Docs >       |
+| 加入团队  |       /myteam/{userId}        |  GET   |           |  List< TeamCheckDTO >   |
+|  回收站   |       /recycle/{userId}       |  GET   |           |  List< DeleteDocDTO >   |
+| 消息中心  | /notification/{page}/{userId} |  GET   |           | List< NotificationDTO > |
+| 一键清空  |     /deletedAll/{userId}      |  GET   |           |        ResultDTO        |
+| 逐个删除  |      /deletedOne/{docId}      |  GET   |           |        ResultDTO        |
 
 Page可以传回所包含的数据，总页数，总记录数，当前页面，是否有上一页或下一页
 
@@ -146,28 +144,28 @@ status{0：未读；1：已读}
 |  interface   |              path              | method |  parameter   |                          return                          |
 | :----------: | :----------------------------: | :----: | :----------: | :------------------------------------------------------: |
 |   创建文档   |         /doc/{userId}          |  PSOT  | DocCreateDTO | ResultDTO{type=200:正常,else:异常},message中含有异常信息 |
-|   修改文档   |       /doc/{id}/{userId}       |  POST  | DocCreateDTO | ResultDTO{type=200:正常,else:异常},message中含有异常信息 |
-|   查看文档   |       /doc/{id}/{title}        |  GET   |              |                       DocReturnDTO                       |
+|   修改文档   |     /doc/{docId}/{userId}      |  POST  | DocCreateDTO | ResultDTO{type=200:正常,else:异常},message中含有异常信息 |
+|   查看文档   | /doc/{docId}/{title}/{userId}  |  GET   |              |                       DocReturnDTO                       |
 |   收藏文档   | /collect/{id}/{title}/{userId} |  GET   |              |                        ResultDTO                         |
-|   取消收藏   |     /cancel/{id}/{userId}      |  GET   |              |                        ResultDTO                         |
+|   取消收藏   |    /cancel/{docId}/{userId}    |  GET   |              |                        ResultDTO                         |
 |   删除文档   |          /delete/{id}          | DELETE |              |                        ResultDTO                         |
 |   恢复文档   |         /recovery/{id}         |  PUT   |              |                        ResultDTO                         |
-| 更改文档状态 |          /doc/{docId}          |  GET   |              |                        ResultDTO                         |
+| 更改文档状态 |       /docStatus/{docId}       |  GET   |              |                        ResultDTO                         |
 
 该表中传的所有id皆为对应文档的id
 
 #### 团队功能
 
-|  interface   |                 path                 | method  |   parameter   |                          return                          |
-| :----------: | :----------------------------------: | :-----: | :-----------: | :------------------------------------------------------: |
-|   创建团队   |            /team/{userId}            |  POST   | TeamCreateDTO | ResultDTO{type=200:正常,else:异常},message中含有异常信息 |
-|   解散团队   |           /deleteTeam/{id}           | DELETED |               |                        ResultDTO                         |
-|   查看信息   |       /team/{teamId}/{userId}        |   GET   |               |                      TeamReturnDTO                       |
-|   加入团队   |       /join/{teamId}/{userId}        |   GET   |               |                        ResultDTO                         |
-|   退出团队   |      /quit/{teamId}/{userName}       |   GET   |               |                        ResultDTO                         |
-|   设置权限   |     /authority/{docId}/{weight}      |   GET   |               |                        ResultDTO                         |
-|   搜索团队   |          /search/{teamName}          |   GET   |               |                  List< TeamReturnDTO >                   |
-| 修改文档权限 | /modifyAuthority/{docId}/{authority} |   GET   |               |                        ResultDTO                         |
+|  interface   |                      path                       | method  |   parameter   |                          return                          |
+| :----------: | :---------------------------------------------: | :-----: | :-----------: | :------------------------------------------------------: |
+|   创建团队   |                 /team/{userId}                  |  POST   | TeamCreateDTO | ResultDTO{type=200:正常,else:异常},message中含有异常信息 |
+|   解散团队   |                /deleteTeam/{id}                 | DELETED |               |                        ResultDTO                         |
+|   查看信息   |             /team/{teamId}/{userId}             |   GET   |               |                      TeamReturnDTO                       |
+|   加入团队   |   /join/{teamId}/{newUserId}/{currentUserId}    |   GET   |               |                        ResultDTO                         |
+|   退出团队   | /quit/{teamId}/{quitUserName}/{currentUserName} |   GET   |               |                        ResultDTO                         |
+|   设置权限   |           /authority/{docId}/{weight}           |   GET   |               |                        ResultDTO                         |
+|   搜索团队   |               /search/{teamName}                |   GET   |               |                  List< TeamReturnDTO >                   |
+| 修改文档权限 |      /modifyAuthority/{docId}/{authority}       |   GET   |               |                        ResultDTO                         |
 
 加入分为主动加入和邀请加入，若管理员或者被邀请者同意，则调用该接口将该用户写入成员列
 

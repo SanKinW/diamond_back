@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sankin.diamond.DTO.UserDTO;
 import com.sankin.diamond.entity.Favourites;
+import com.sankin.diamond.entity.Users;
 import com.sankin.diamond.mapper.FavouriteMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class FavouriteService {
         favouriteMapper.insert(favourites);
     }
 
-    public Integer findByOne(UserDTO user, Integer id) {
+    public Integer findByOne(Users user, Integer id) {
         Map<String, Object> columnMap = new HashMap<>();
         columnMap.put("collector_id", user.getId());
         columnMap.put("doc_id", id);

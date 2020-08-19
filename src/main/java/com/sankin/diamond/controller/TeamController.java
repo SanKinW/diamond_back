@@ -125,15 +125,13 @@ public class TeamController {
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/join/{teamId}/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/join/{teamId}/{newUserId}/{currentUserId}", method = RequestMethod.GET)
     public Object joinTeam(@PathVariable("teamId") Integer teamId,
-                           @PathVariable("userId") Integer userId,
+                           @PathVariable("newUserId") Integer userId,
+                           @PathVariable("currentUserId") Integer currentUserId,
                            HttpServletRequest request) {
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        if (user != null) {
-            if (user.getId() == userId) notificationService.joinReturn(userId, teamId, 7);
-            else notificationService.joinReturn(userId, teamId, 8);
-        }
+        if (currentUserId == userId) notificationService.joinReturn(userId, teamId, 7);
+        else notificationService.joinReturn(userId, teamId, 8);
         int result = teamService.updateMembers(teamId, userId);
         if (result > 0) {
             usersService.updateTeams(userId, teamId);
@@ -145,23 +143,24 @@ public class TeamController {
     /**
      * 退出团队
      * @param teamId
-     * @param userName
+     * @param quitUserName
      * @return
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/quit/{teamId}/{userName}", method = RequestMethod.GET)
+    @RequestMapping(value = "/quit/{teamId}/{quitUserName}/{currentUserName}", method = RequestMethod.GET)
     public Object quitTeam(@PathVariable("teamId") Integer teamId,
-                           @PathVariable("userName") String userName,
+                           @PathVariable("quitUserName") String quitUserName,
+                           @PathVariable("currentUserName") String currentUserName,
                            HttpServletRequest request) {
-        usersService.quitTeam(userName, teamId);
-        teamService.clearUser(userName, teamId);
+        usersService.quitTeam(quitUserName, teamId);
+        teamService.clearUser(quitUserName, teamId);
         int teamCreator = teamService.getCreatorById(teamId);
-        int docCreator = usersService.getIdByName(userName);
+        int docCreator = usersService.getIdByName(quitUserName);
         docsService.updateCreator(docCreator, teamId, teamCreator);
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
-        if (user.getUserName().equals(userName)) notificationService.quit(teamId, userName, 3);
-        else notificationService.quit(teamId, userName, 4);
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        if (currentUserName.equals(quitUserName)) notificationService.quit(teamId, quitUserName, 3);
+        else notificationService.quit(teamId, quitUserName, 4);
         return ResultDTO.okOf();
     }
 

@@ -6,6 +6,7 @@ import com.sankin.diamond.DTO.ResultDTO;
 import com.sankin.diamond.DTO.UserDTO;
 import com.sankin.diamond.entity.Comments;
 import com.sankin.diamond.entity.Docs;
+import com.sankin.diamond.entity.Users;
 import com.sankin.diamond.exception.ErrorException;
 import com.sankin.diamond.exception.ErrorType;
 import com.sankin.diamond.service.*;
@@ -41,18 +42,23 @@ public class DocsController {
     /**
      * 查看文档
      * @param id
+     * @param title
+     * @param userId
      * @param request
+     * @param response
      * @return
      */
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/doc/{id}/{title}", method = RequestMethod.GET)
+    @RequestMapping(value = "/doc/{id}/{title}/{userId}", method = RequestMethod.GET)
     public Object viewDoc(@PathVariable("id") Integer id,
                           @PathVariable("title")String title,
+                          @PathVariable("userId") Integer userId,
                           HttpServletRequest request,
                           HttpServletResponse response) {
         //response.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        //UserDTO user = (UserDTO) request.getSession().getAttribute("user");
+        Users user = usersService.selectById(userId);
         DocReturnDTO returnDTO = new DocReturnDTO();
         Docs doc = docsService.selectOne(id);
         if (doc == null) {
@@ -65,7 +71,7 @@ public class DocsController {
                     returnDTO.setShared(0);
                     returnDTO.setCommented(0);
                     returnDTO.setModified(1);
-                    returnDTO.setEdited(1);
+                    returnDTO.setEdited(0);
                     returnDTO.setResultDTO(ResultDTO.okOf());
                 }
                 else {
