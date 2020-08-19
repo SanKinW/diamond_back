@@ -66,18 +66,16 @@ public class DocsController {
             return returnDTO;
         }
         if(user != null) {
-            if (doc.getAuthority() == 0 && (doc.getTeamId() == 0 || doc.getTeamId() == null)) {
-                if (user.getId() == doc.getCreator()) {
-                    returnDTO.setShared(0);
-                    returnDTO.setCommented(0);
-                    returnDTO.setModified(1);
-                    returnDTO.setEdited(0);
-                    returnDTO.setResultDTO(ResultDTO.okOf());
-                }
-                else {
-                    returnDTO.setResultDTO(ResultDTO.errorOf(ErrorType.READ_NOTIFICATION_FAILED));
-                    return returnDTO;
-                }
+            if (doc.getCreator() == userId) {
+                returnDTO.setShared(0);
+                returnDTO.setCommented(0);
+                returnDTO.setModified(1);
+                returnDTO.setEdited(0);
+                returnDTO.setResultDTO(ResultDTO.okOf());
+            }
+            else if (doc.getAuthority() == 0 && (doc.getTeamId() == null || doc.getTeamId() == 0)) {
+                returnDTO.setResultDTO(ResultDTO.errorOf(ErrorType.READ_NOTIFICATION_FAILED));
+                return returnDTO;
             }
             else {
                 usersService.setAuthority(returnDTO, doc, user.getId());
