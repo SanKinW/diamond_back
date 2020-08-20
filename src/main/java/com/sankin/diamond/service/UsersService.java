@@ -161,9 +161,11 @@ public class UsersService {
             String[] members = team.getMembers().split(",");
             for(int i = 0; i < members.length; ++i) {
                 int num = Integer.parseInt(members[i]);
-                if (num == userId) setDocAuthority(returnDTO, 1, 1, 1);
-                returnDTO.setResultDTO(ResultDTO.okOf());
-                return;
+                if (num == userId) {
+                    setDocAuthority(returnDTO, 1, 1, 1);
+                    returnDTO.setResultDTO(ResultDTO.okOf());
+                    return;
+                }
             }
         }
         int authority = doc.getAuthority();

@@ -36,7 +36,18 @@ class DiamondApplicationTests {
 
     @Test
     void contextLoads() {
-        notificationService.refuse(1, "Moon", 10);
+        int authority = 1;
+        int num[] = new int[4];
+        int count = 0;
+        while (authority != 0) {
+            num[count] = authority&1;
+            count++;
+            authority = authority >> 1;
+        }
+        System.out.println(num[0]);
+        System.out.println(num[1]);
+        System.out.println(num[2]);
+        System.out.println(num[3]);
     }
 
     @Test
