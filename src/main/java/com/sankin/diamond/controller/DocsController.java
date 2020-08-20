@@ -67,8 +67,8 @@ public class DocsController {
         }
         if(user != null) {
             if (doc.getCreator() == userId) {
-                returnDTO.setShared(0);
-                returnDTO.setCommented(0);
+                returnDTO.setShared(1);
+                returnDTO.setCommented(1);
                 returnDTO.setModified(1);
                 returnDTO.setEdited(0);
                 returnDTO.setResultDTO(ResultDTO.okOf());
